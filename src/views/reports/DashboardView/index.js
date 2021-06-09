@@ -38,15 +38,11 @@ class Dashboard extends React.Component{
     super(props)
     this.state = {
       data: {
-        total_food_count:"----",
-        total_food_amount:"----",
-        total_drink_count:"----",
-        total_drink_amount:"----",
-        total_reservations:"----",
-        drinks_instock:"----",
-        foods_instock:"----",
-        rooms_available:"----",
-        customers_balances:"----",
+        media_campaign:"----",
+        fortfolio_investment:"----",
+        fiat_interest:"----",
+        crypto_interest:"----",
+        customers:"----",
       }
     }
   }
@@ -89,34 +85,57 @@ class Dashboard extends React.Component{
         <Container maxWidth={false}>
           <Grid
             container
-            spacing={3}
+            spacing={2}
           >
+
             <Grid
               item
-              lg={3}
+              lg={4}
               sm={6}
-              xl={3}
+              xl={4}
               xs={12}
             >
-              <Budget data={this.state.data.total_premium} />
+              <TotalCustomers data={this.state.data.customers} />
             </Grid>
+
             <Grid
               item
-              lg={3}
+              lg={4}
               sm={6}
-              xl={3}
+              xl={4}
               xs={12}
             >
-              <TotalCustomers data={this.state.data.total_customer} />
+              <Budget data={this.state.data.fiat_interest} />
             </Grid>
+
             <Grid
               item
-              lg={3}
+              lg={4}
               sm={6}
-              xl={3}
+              xl={4}
               xs={12}
             >
-              <TasksProgress data={this.state.data.total_policy} />
+              <TasksProgress data={this.state.data.crypto_interest} />
+            </Grid>
+
+            <Grid
+              item
+              lg={4}
+              sm={6}
+              xl={4}
+              xs={12}
+            >
+              <TotalProfit data={this.state.data.fortfolio_investment} />
+            </Grid>
+
+            <Grid
+              item
+              lg={4}
+              sm={6}
+              xl={4}
+              xs={12}
+            >
+              <Rooms data={this.state.data.media_campaign} />
             </Grid>
           </Grid>
         </Container>

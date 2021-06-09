@@ -11,7 +11,7 @@ import {
   makeStyles,
   colors
 } from '@material-ui/core';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import AttachMoneyIcon from '@material-ui/icons/ArrowUpward';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -44,13 +44,13 @@ const TotalProfit = ({ className, data, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              DRINKS IN STOCK
+              FORTFOLIO INVESTMENT
             </Typography>
             <Typography
               color="textPrimary"
               variant="h3"
             >
-              {parseFloat(data).toLocaleString()}
+              &#8358;{parseFloat(data).toLocaleString()}
             </Typography>
           </Grid>
           <Grid item>

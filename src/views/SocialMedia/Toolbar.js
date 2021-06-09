@@ -38,31 +38,12 @@ const Toolbar = ({ className, is_fiat, ...rest }) => {
         display="flex"
         justifyContent="flex-end"
       >
-        {is_fiat ? (
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={e=>{navigate('/app/crypto-investments')}}
-            style={{marginRight:10}}
-          >
-            Crypto Investment
-          </Button>
-        ) : (
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={e=>{navigate('/app/investments')}}
-            style={{marginRight:10}}
-          >
-            Investment
-          </Button>
-        )}
         <Button
           color="primary"
           variant="contained"
-          onClick={e=>{navigate('/app/add-investment')}}
+          onClick={e=>{navigate('/app/add-social-contract')}}
         >
-          Add Investment
+          Add Contract
         </Button>
       </Box>
       

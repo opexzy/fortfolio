@@ -34,7 +34,6 @@ import { uniqueId } from 'lodash';
 import {makeRequest, handleError} from 'src/utils/axios-helper';
 import { withPermission, useRouter } from 'src/utils';
 import qs from 'qs'
-import Agent from '../Agent';
 import { Add, Remove } from '@material-ui/icons';
 import moment from 'moment';
 
@@ -67,10 +66,12 @@ class AddInvestment extends React.Component{
             duration: null,
             investment_date: null,
             maturity_date: null,
+            type: 'fiat',
+            asset: null,
             text: "",
             send_alert: true,
             customers: [],
-            isLoading: false
+            isLoading: false,
         }
     }
 
@@ -97,26 +98,46 @@ class AddInvestment extends React.Component{
     }
 
     handleCreate = (event) =>{
-        this.setState({isLoading:true});
-        makeRequest(this.props).post('/investment/add', qs.stringify(this.state))
-            .then(response => {
-                this.props.enqueueSnackbar(response.data.message, {variant: "success"});
-                this.props.navigate("/app/investments");
-            })
-            .catch(error => {
-                handleError({
-                    error: error,
-                    callbacks: {
-                        400: response=>{
-                            this.props.enqueueSnackbar(response.data.message, {variant: "error"});
-                        }
-                    }
-                }, this.props);
-            })
-            .finally(() => {
-                //do nothing
-                this.setState({isLoading:false});
-            })
+        this.props.openDialog({
+            viewCtrl: "warning",
+            title: "Confirm New Investment",
+            description: "Make sure you have confirmed the details before you proceed from here",
+            close: dialog =>{
+                if(dialog.viewCtrl == "success"){
+                    this.props.navigate("/app/investments");
+                }
+                dialog.close()
+            },
+            confirm: dialog =>{
+                makeRequest(this.props).post('/investment/add', qs.stringify(this.state))
+                    .then(response => {
+                        dialog.setViewCtrl("success")
+                        dialog.setTitle("Investment Record Created!")
+                        dialog.setDescription(
+                            <Typography>
+                                {response.data.message}
+                            </Typography>
+                        )
+                        this.props.enqueueSnackbar(response.data.message, {variant: "success"}); 
+                    })
+                    .catch(error => {
+                        handleError({
+                            error: error,
+                            callbacks: {
+                                400: response=>{
+                                    this.props.enqueueSnackbar(response.data.message, {variant: "error"});
+                                    dialog.setViewCtrl("")
+                                }
+                            }
+                        }, this.props);
+                    })
+                    .finally(() => {
+                        //do nothing
+                        this.setState({isLoading:false});
+                    })
+            }
+        })
+        
     }
 
 
@@ -194,10 +215,42 @@ class AddInvestment extends React.Component{
                             <TextField
                                 fullWidth
                                 variant="outlined"
+                                name="type"
+                                label="Investment Type"
+                                value={this.state.type}
+                                onChange={this.onChange}
+                                select
+                            >
+                                <MenuItem value="fiat">Fiat Money</MenuItem>
+                                <MenuItem value="crypto">Crypto-Currency</MenuItem>
+                            </TextField>
+                        </Grid>
+                        {this.state.type == 'crypto' && <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                name="asset"
+                                label="Crypto Asset"
+                                value={this.state.asset}
+                                onChange={this.onChange}
+                                select
+                            >
+                                <MenuItem value="btc">Bitcoin (BTC)</MenuItem>
+                                <MenuItem value="eth">Ethereum (ETH)</MenuItem>
+                                <MenuItem value="bch">Bitcoin Cash (BCH)</MenuItem>
+                                <MenuItem value="usdt">TetherUS (USDT)</MenuItem>
+                                <MenuItem value="xrp">Ripple (XRP)</MenuItem>
+                            </TextField>
+                        </Grid>}
+                        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
                                 name="amount"
                                 label="amount"
                                 value={this.state.amount}
                                 onChange={this.onChange}
+                                helperText={this.state.type=="fiat" ? "Amount in Naira" : "Amount in Dollar"}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
@@ -276,7 +329,7 @@ class AddInvestment extends React.Component{
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Total Amount</Typography>
-                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.state.total_amount).toLocaleString()}</Typography>
+                            <Typography variant="caption" component="p">{parseFloat(this.state.total_amount).toLocaleString()}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Duration</Typography>

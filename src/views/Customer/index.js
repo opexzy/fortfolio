@@ -38,7 +38,6 @@ import DataViewLoader from 'src/components/DataViewLoader';
 import {makeRequest, handleError} from 'src/utils/axios-helper';
 import { withPermission, useRouter } from 'src/utils';
 import { setSelectedUser } from 'src/actions'
-import EditCustomer from './EditCustomer';
 import DataLayoutWraper from 'src/layouts/DataLayoutWraper';
 import qs from 'qs'
 import moment from 'moment'

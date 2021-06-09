@@ -28,7 +28,6 @@ import { uniqueId } from 'lodash';
 import {makeRequest, handleError} from 'src/utils/axios-helper';
 import { withPermission, useRouter } from 'src/utils';
 import qs from 'qs'
-import Agent from '../Agent';
 import { Add, Remove } from '@material-ui/icons';
 import { useParams } from "react-router-dom"
 

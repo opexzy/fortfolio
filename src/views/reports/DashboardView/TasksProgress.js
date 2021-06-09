@@ -12,7 +12,7 @@ import {
   colors
 } from '@material-ui/core';
 import Book from '@material-ui/icons/Book';
-import { AvTimer } from '@material-ui/icons';
+import { AttachMoney } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,18 +45,18 @@ const TotalProfit = ({ className,data, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              ACTIVE POLICIES
+              CRYPTO INTREST PAID
             </Typography>
             <Typography
               color="textPrimary"
               variant="h3"
             >
-              {parseFloat(data).toLocaleString()}
+              ${parseFloat(data).toLocaleString()}
             </Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <Book />
+              <AttachMoney/>
             </Avatar>
           </Grid>
         </Grid>

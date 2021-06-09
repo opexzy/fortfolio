@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Toolbar = ({ className, is_fiat, ...rest }) => {
   const classes = useStyles();
   const navigate = useNavigate()
 
@@ -38,18 +38,12 @@ const Toolbar = ({ className, ...rest }) => {
         display="flex"
         justifyContent="flex-end"
       >
-        <Button className={classes.importButton}>
-          Import
-        </Button>
-        <Button className={classes.exportButton}>
-          Export
-        </Button>
         <Button
           color="primary"
           variant="contained"
-          onClick={e=>{navigate('/app/add-agent', {replace:true})}}
+          onClick={e=>{navigate('/app/add-fort-investment')}}
         >
-          Add Agent
+          Add Investment
         </Button>
       </Box>
       

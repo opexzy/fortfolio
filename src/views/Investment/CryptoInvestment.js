@@ -98,7 +98,7 @@ const useStyles = createStyles( theme => ({
 
 const VIEW_PERMISSION_NAME = [];
 
-class Investment extends React.Component {
+class CryptoInvestment extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -137,7 +137,7 @@ class Investment extends React.Component {
     
     onChangePage = (event, page) =>{
         this.setState({isLoading:true, page: page})
-        makeRequest(this.props).post('/investment/list/' + (page+1), qs.stringify(this.state.filters))
+        makeRequest(this.props).post('/investment/list/' + (page+1) + '?type=crypto', qs.stringify(this.state.filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -168,7 +168,7 @@ class Investment extends React.Component {
 
     componentDidMount(){
         this.fetch_investment_report()
-        makeRequest(this.props).post('/investment/list')
+        makeRequest(this.props).post('/investment/list'+ '?type=crypto')
             .then(response => {
             this.setState({rows: response.data.data.list, count: response.data.data.count})
             })
@@ -190,7 +190,7 @@ class Investment extends React.Component {
 
     searchHandler = filters =>{
         this.setState({isLoading:true, page: 0})
-        makeRequest(this.props).post('/investment/list', qs.stringify(filters))
+        makeRequest(this.props).post('/investment/list'+ '?type=crypto', qs.stringify(filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -255,7 +255,7 @@ class Investment extends React.Component {
     }
 
     fetch_investment_report = () =>{
-        makeRequest(this.props).get('investment/report/fiat'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
+        makeRequest(this.props).get('investment/report/crypto'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
         .then(response => {
             this.setState({report: response.data.data.report})
         })
@@ -274,7 +274,7 @@ class Investment extends React.Component {
 
     onDateChange = evt =>{
         this.setState({report:null});
-        makeRequest(this.props).get('investment/report/fiat/'+evt.target.value)
+        makeRequest(this.props).get('investment/report/crypto/'+evt.target.value)
         .then(response => {
             this.setState({report: response.data.data.report})
         })
@@ -341,7 +341,7 @@ class Investment extends React.Component {
                 <Dialog open={this.state.openPrint} maxWidth="md" fullWidth onClose={e=>this.setState({openPrint:false})}>
                     <DialogTitle>Investment Details</DialogTitle>
                     <DialogContent>
-                        <InvestmentDetail is_fiat={true} data={this.state.investmentData} ref={el => (this.componentRef = el)}/>
+                        <InvestmentDetail is_fiat={false} data={this.state.investmentData} ref={el => (this.componentRef = el)}/>
                     </DialogContent>
                     <DialogActions>
                         <ReactToPrint content={() => this.componentRef}>
@@ -362,7 +362,7 @@ class Investment extends React.Component {
                                 <CircularProgress/>
                             </Box>
                         ):(
-                            <PaymentPrintTemplate is_fiat={true} data={this.state.paymentData} ref={el => (this.componentRef = el)}/>
+                            <PaymentPrintTemplate is_fiat={false} data={this.state.paymentData} ref={el => (this.componentRef = el)}/>
                         )}
                     </DialogContent>
                     <DialogActions>
@@ -377,7 +377,7 @@ class Investment extends React.Component {
                 </Dialog>
 
                 <Container maxWidth={false}>
-                    <Toolbar is_fiat={true} />
+                    <Toolbar is_fiat={false} />
                     <Grid container spacing={2} style={{marginBottom:10, marginTop:15}}>
                         <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                             <TextField
@@ -410,6 +410,7 @@ class Investment extends React.Component {
                                     title="COMPLETED INVESTMENTS" 
                                     value={parseFloat(this.state.report.completed_investment_amount).toLocaleString()}
                                     extra={this.state.report.completed_investment_no}
+                                    is_fiat={false}
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -421,6 +422,7 @@ class Investment extends React.Component {
                                     title="INTEREST DUE THIS MONTH" 
                                     value={parseFloat(this.state.report.interest_due_amount).toLocaleString()}
                                     extra={this.state.report.interest_due_no}
+                                    is_fiat={false}
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -432,6 +434,7 @@ class Investment extends React.Component {
                                     title="INTEREST PAID THIS MONTH" 
                                     value={parseFloat(this.state.report.interest_paid_amount).toLocaleString()}
                                     extra={this.state.report.interest_paid_no}
+                                    is_fiat={false}
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -443,6 +446,7 @@ class Investment extends React.Component {
                                     title="CAPITAL DUE THIS MONTH" 
                                     value={parseFloat(this.state.report.capital_due_amount).toLocaleString()}
                                     extra={this.state.report.capital_due_no}
+                                    is_fiat={false}
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -454,6 +458,7 @@ class Investment extends React.Component {
                                     title="CAPITAL PAID THIS MONTH" 
                                     value={parseFloat(this.state.report.capital_paid_amount).toLocaleString()}
                                     extra={this.state.report.capital_paid_no}
+                                    is_fiat={false}
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -482,7 +487,7 @@ class Investment extends React.Component {
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
-                                                &#8358;{parseFloat(row.amount).toLocaleString()}
+                                                ${parseFloat(row.amount).toLocaleString()}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">
@@ -549,4 +554,4 @@ export default connect(mapStateToProps)(
     withSnackbar(
         withPermission(VIEW_PERMISSION_NAME)(
         withStyles(useStyles)(
-            useRouter(withConfirmationDialog(Investment))))));
+            useRouter(withConfirmationDialog(CryptoInvestment))))));

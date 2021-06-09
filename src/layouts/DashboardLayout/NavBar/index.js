@@ -53,7 +53,7 @@ const items = [
     title: 'Payments'
   },
   {
-    href: '/app/fortfolio-investment',
+    href: '/app/fort-investments',
     icon: Folder,
     title: 'Forfolio Investment'
   },

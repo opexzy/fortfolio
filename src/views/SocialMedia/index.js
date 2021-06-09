@@ -17,8 +17,11 @@ import { Edit as EditIcon,
     Settings,
     Person,
     PersonAdd,
+    Print,
+    Commute,
     Delete,
-    Refresh
+    GamepadOutlined,
+    History
 } from '@material-ui/icons'
 import { 
     TableRow,
@@ -29,16 +32,12 @@ import {
     Typography,
     Box,
     Container,
+    Button,
     Dialog,
     DialogTitle,
     DialogContent,
-    Button,
-    Divider,
-    Grid,
-    TextField,
     DialogActions,
-    CircularProgress,
-    MenuItem
+    CircularProgress
 } from '@material-ui/core';
 import { deepOrange } from '@material-ui/core/colors';
 import { withSnackbar } from 'notistack';
@@ -50,9 +49,8 @@ import { setSelectedUser } from 'src/actions'
 import DataLayoutWraper from 'src/layouts/DataLayoutWraper';
 import qs from 'qs'
 import moment from 'moment'
-import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
-import PrintTemplate from './ReceiptTemplate'
 import AppConfig from 'src/config/appConfig'
+import withConfirmationDialog from 'src/utils/confirmationDialog'
 
 const useStyles = createStyles( theme => ({
     root: {
@@ -93,17 +91,18 @@ const useStyles = createStyles( theme => ({
 
 const VIEW_PERMISSION_NAME = [];
 
-class Customer extends React.Component {
+class Policy extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             columns: [
-                {label:'Full Name'},
-                {label:'Investment Ref'},
-                {label:'Amount'},
+                {label:'Client'},
+                {label:'Campaign Name'},
+                {label:'Budget'},
+                {label:'Targets'},
+                {label:'Start Date'},
+                {label:'End Date'},
                 {label:'Status'},
-                {label:'Narration'},
-                {label:'Due Date'},
                 {label:'Action'}
             ],
             rows: [],
@@ -118,26 +117,18 @@ class Customer extends React.Component {
             selectedStaff: null,
             selectedIndex: null,
             filters: null,
-            policy_no: null,
-            policy:null,
-            amount: null,
-            narration: null,
-            payment_date:null,
-            channel:null,
-            teller_no:null,
-            bank:null,
-            isLoadingVerify: false,
-            isLoadingPayment: false,
-            isLoadingAction: false,
             openPrint: false,
-            isLoadingPrint: true,
-            receiptData: null
+            isLoadingPrint: false,
+            openPaymentPrint: false,
+            isLoadingPayment: false,
+            investmentData:null,
+            paymentData:null,
         }
     }
     
     onChangePage = (event, page) =>{
         this.setState({isLoading:true, page: page})
-        makeRequest(this.props).post('/payment/list/' + (page+1), qs.stringify(this.state.filters))
+        makeRequest(this.props).post('/social-media/list/' + (page+1), qs.stringify(this.state.filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -166,25 +157,11 @@ class Customer extends React.Component {
         }
     }
 
-    clearFields = ()=>{
-        this.setState({
-            policy_no: "",
-            amount: "",
-            narration: "",
-            payment_date: "",
-            channel: "",
-            period_cover: "",
-            bank: "",
-            teller_no:"",
-            policy:null
-        })
-    }
-
     componentDidMount(){
         //check if token is valid
-        makeRequest(this.props).post('/payment/list')
+        makeRequest(this.props).post('/social-media/list')
             .then(response => {
-                this.setState({rows: response.data.data.list, count: response.data.data.count})
+            this.setState({rows: response.data.data.list, count: response.data.data.count})
             })
             .catch(error => {
                 handleError({
@@ -204,7 +181,7 @@ class Customer extends React.Component {
 
     searchHandler = filters =>{
         this.setState({isLoading:true, page: 0})
-        makeRequest(this.props).post('/payment/list', qs.stringify(filters))
+        makeRequest(this.props).post('/social-media/list', qs.stringify(filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -245,155 +222,114 @@ class Customer extends React.Component {
         this.componentDidMount()
     }
 
-    handleMakePayment = ()=>{
-        this.setState({isLoadingPayment:true});
-        makeRequest(this.props).post('/payment/add', qs.stringify({
-            policy_no: this.state.policy_no,
-            amount: this.state.amount,
-            narration: this.state.narration,
-            payment_date: this.state.payment_date,
-            channel: this.state.channel,
-            period_cover: this.state.period_cover,
-            bank: this.state.bank,
-            teller_no: this.state.teller_no
-        }))
-        .then(response => {
-            this.props.enqueueSnackbar(response.data.message, {variant: "success"});
-            this.reload();
-            this.clearFields();
-        })
-        .catch(error => {
-            handleError({
-                error: error,
-                callbacks: {
-                400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
-                }
-            }, this.props);
-        })
-        .finally(() => {
-            this.setState({isLoadingPayment:false});
-        })
+    viewInvestment = (data) => {
+        this.setState({openPrint:true, investmentData:data})
     }
 
-    approvePayment = (reference)=>{
-        this.setState({isLoadingAction:true});
-        makeRequest(this.props).get('/payment/approve/'+reference)
-        .then(response => {
-            this.props.enqueueSnackbar(response.data.message, {variant: "success"});
-            this.reload();
-        })
-        .catch(error => {
-            handleError({
-                error: error,
-                callbacks: {
-                400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
-                }
-            }, this.props);
-        })
-        .finally(() => {
-            //Do nothing
-            this.setState({isLoadingAction:false});
+    delete = (id) =>{
+        this.props.openDialog({
+            viewCtrl: "warning",
+            title: "Confirm Contract Delete",
+            description: "Make sure you have confirmed the details before you proceed from here",
+            close: dialog =>{
+                dialog.close()
+            },
+            confirm: dialog =>{
+                makeRequest(this.props).get('/social-media/delete/'+id)
+                    .then(response => {
+                        dialog.setViewCtrl("success")
+                        dialog.setTitle("Removed!")
+                        dialog.setDescription(
+                            <Typography>
+                                {response.data.message}
+                            </Typography>
+                        )
+                        this.props.enqueueSnackbar(response.data.message, {variant: "success"}); 
+                        this.reload()
+                    })
+                    .catch(error => {
+                        handleError({
+                            error: error,
+                            callbacks: {
+                                400: response=>{
+                                    this.props.enqueueSnackbar(response.data.message, {variant: "error"});
+                                    dialog.setViewCtrl("")
+                                }
+                            }
+                        }, this.props);
+                    })
+                    .finally(() => {
+                        //do nothing
+                        this.setState({isLoading:false});
+                    })
+            }
         })
     }
-
-    printReceipt = (reference) => {
-        this.setState({openPrint:true, isLoadingPrint:true})
-        makeRequest(this.props).get('/payment/receipt/'+reference)
-        .then(response => {
-            this.setState({receiptData:response.data.data, isLoadingPrint:false})
-        })
-        .catch(error => {
-            handleError({
-                error: error,
-                callbacks: {
-                400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
-                }
-            }, this.props);
-        })
-        .finally(() => {
-            //Do nothing
-        })
-    }
-
 
     render(){
         return(
             <Page
                 className={this.props.classes.root}
-                title="Payment"
+                title="Social Media Contract"
                 >
 
                 <Container maxWidth={false}>
+                    <Toolbar is_fiat={true} />
                     <Box mt={3}>
-                    <DataLayoutWraper sectionHeading="Customers" searchHandler={this.searchHandler} reloadHandler={this.reload}>
+                    <DataLayoutWraper sectionHeading="Social Media Contract" searchHandler={this.searchHandler} reloadHandler={this.reload}>
                         <DataViewLoader isLoading={this.state.isLoading} data={this.state.rows}>
                             <TableMaker columns={this.state.columns} page={this.state.page} count={this.state.count} options={this.state.options}>
                                 {this.state.rows.map((row, index) => (
-                                    <TableRow hover key={row.staff_id}>
+                                    <TableRow hover key={row.id}>
                                         <TableCell align="left">
                                             <Box className={this.props.classes.boxOuter}>
-                                                <Avatar 
-                                                    src={''} 
-                                                    className={this.props.classes.avatar}
-                                                >
-                                                    {getInitials(row.customer.first_name + " " + row.customer.surname)} 
-                                                </Avatar>
                                                 <Box className={this.props.classes.boxInner}>
-                                                    <p className={this.props.classes.name}>{row.customer.surname + " " + row.customer.first_name + " " + row.customer.other_name}</p>
-                                                    <p className={this.props.classes.position}>Ref: #{row.id}</p>
+                                                    <p className={this.props.classes.name}>{row.client}</p>
                                                 </Box>
                                             </Box>
                                         </TableCell>
                                         <TableCell align="center">
-                                            <Typography className={this.props.classes.typo} style={{fontStyle: "italic"}}>
-                                                #{row.investment_id}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {row.investment_type == "fiat" ? (
-                                                <Typography className={this.props.classes.typo}>
-                                                    &#8358;{parseFloat(row.amount).toLocaleString({minimumFractionDigits:2})}
-                                                </Typography>
-                                            ) : (
-                                                <Typography className={this.props.classes.typo}>
-                                                    ${parseFloat(row.amount).toLocaleString({minimumFractionDigits:2})}
-                                                </Typography>
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <StatusBadge 
-                                                variant={row.status}
-                                            > 
-                                                {row.status} 
-                                            </StatusBadge>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography className={this.props.classes.typo} style={{textTransform: "capitalize"}}>
-                                                {row.type == "interest" ? row.roi_payment_frequency+" Interest Payment" : "Capital Refund"}
+                                            <Typography className={this.props.classes.typo}>
+                                                {row.campaign_name}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
-                                                {moment(row.payment_date).format("Do MMMM, YYYY")}
+                                                &#8358;{parseFloat(row.budget).toLocaleString()}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {row.media_targets}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {moment(row.start_date).format("Do MMMM, YYYY")}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {moment(row.end_date).format("Do MMMM, YYYY")}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <StatusBadge variant={row.status}>
+                                                {row.status}
+                                            </StatusBadge>
+                                        </TableCell>
+                                        <TableCell align="center">
                                             <PopoverMenu>
-                                                {
-                                                    this.state.isLoadingAction ? (
-                                                        <CircularProgress size={20}/>
-                                                    ) : (
-                                                        <>
-                                                            <IconMenuItem 
-                                                                icon={<CheckIcon color="primary"/>} 
-                                                                text="Approve" 
-                                                                disabled={row.status!="pending"}
-                                                                onClick={evt => this.approvePayment(row.id)}
-                                                            />
-                                                        </>
-                                                    )
-                                                }
-                                                
+                                                <IconMenuItem 
+                                                    icon={<EditIcon color="primary"/>} 
+                                                    text="View/Edit" 
+                                                    onClick={e=>this.props.navigate("/app/edit-social-contract/"+row.id)}
+                                                />
+                                                <IconMenuItem 
+                                                    icon={<Delete color="primary"/>} 
+                                                    text="Delete"
+                                                    onClick={e=>this.delete(row.id)}
+                                                />
                                             </PopoverMenu>
                                         </TableCell>
                                     </TableRow>
@@ -416,4 +352,4 @@ export default connect(mapStateToProps)(
     withSnackbar(
         withPermission(VIEW_PERMISSION_NAME)(
         withStyles(useStyles)(
-            useRouter(Customer)))));
+            withConfirmationDialog(useRouter(Policy))))));

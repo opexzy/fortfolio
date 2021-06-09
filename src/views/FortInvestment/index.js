@@ -15,7 +15,13 @@ import { Edit as EditIcon,
     Lock as LockIcon,
     VpnLock,
     Settings,
-    Remove
+    Person,
+    PersonAdd,
+    Print,
+    Commute,
+    Delete,
+    GamepadOutlined,
+    History
 } from '@material-ui/icons'
 import { 
     TableRow,
@@ -26,9 +32,12 @@ import {
     Typography,
     Box,
     Container,
+    Button,
     Dialog,
     DialogTitle,
     DialogContent,
+    DialogActions,
+    CircularProgress
 } from '@material-ui/core';
 import { deepOrange } from '@material-ui/core/colors';
 import { withSnackbar } from 'notistack';
@@ -39,6 +48,9 @@ import { withPermission, useRouter } from 'src/utils';
 import { setSelectedUser } from 'src/actions'
 import DataLayoutWraper from 'src/layouts/DataLayoutWraper';
 import qs from 'qs'
+import moment from 'moment'
+import AppConfig from 'src/config/appConfig'
+import withConfirmationDialog from 'src/utils/confirmationDialog'
 
 const useStyles = createStyles( theme => ({
     root: {
@@ -57,56 +69,65 @@ const useStyles = createStyles( theme => ({
         marginLeft: 5
     },
     avatar: {
-        width: 60,
-        height: 60,
+        width: 40,
+        height: 40,
         backgroundColor: deepOrange[400]
     },
     name:{
-        fontSize: 13,
+        fontSize: 12,
         color: '#111111',
         margin: 0
     },
     typo:{
-        fontSize: 13,
+        fontSize: 12,
     },
     position:{
         fontSize: 12,
         color: '#888888',
-        marginTop: 2
+        marginTop: 2,
+        fontStyle: "italic"
     }
 }))
 
 const VIEW_PERMISSION_NAME = [];
 
-class Agent extends React.Component {
+class Policy extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             columns: [
-                {label:'Full Name'},
-                {label:'Agent_code'},
-                {label:'Customers'},
-                {label:'Policies'},
-                {label:'Action'},
+                {label:'Title/Asset Company'},
+                {label:'Capital'},
+                {label:'Rate'},
+                {label:'Investment Date'},
+                {label:'Maturity Date'},
+                {label:'Status'},
+                {label:'Action'}
             ],
             rows: [],
             count: 0,
             page: 0,
             options: {
-                rowsPerPage: 5,
+                rowsPerPage: AppConfig.rowsPerPage,
                 onChangePage: this.onChangePage
             },
             isLoading: true,
             open: false,
             selectedStaff: null,
             selectedIndex: null,
-            filters: null
+            filters: null,
+            openPrint: false,
+            isLoadingPrint: false,
+            openPaymentPrint: false,
+            isLoadingPayment: false,
+            investmentData:null,
+            paymentData:null,
         }
     }
     
     onChangePage = (event, page) =>{
         this.setState({isLoading:true, page: page})
-        makeRequest(this.props).post('/agent/list/' + (page+1), qs.stringify(this.state.filters))
+        makeRequest(this.props).post('/fort-investment/list/' + (page+1), qs.stringify(this.state.filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -135,14 +156,9 @@ class Agent extends React.Component {
         }
     }
 
-    handlePermission = (user) =>{
-        this.props.dispatch(setSelectedUser(user))
-        this.props.navigate("/app/permission")
-    }
-
     componentDidMount(){
         //check if token is valid
-        makeRequest(this.props).post('/agent/list')
+        makeRequest(this.props).post('/fort-investment/list')
             .then(response => {
             this.setState({rows: response.data.data.list, count: response.data.data.count})
             })
@@ -164,7 +180,7 @@ class Agent extends React.Component {
 
     searchHandler = filters =>{
         this.setState({isLoading:true, page: 0})
-        makeRequest(this.props).post('/agent/list', qs.stringify(filters))
+        makeRequest(this.props).post('/fort-investment/list', qs.stringify(filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -205,57 +221,108 @@ class Agent extends React.Component {
         this.componentDidMount()
     }
 
+    viewInvestment = (data) => {
+        this.setState({openPrint:true, investmentData:data})
+    }
+
+    delete = (id) =>{
+        this.props.openDialog({
+            viewCtrl: "warning",
+            title: "Confirm Investment Delete",
+            description: "Make sure you have confirmed the details before you proceed from here",
+            close: dialog =>{
+                dialog.close()
+            },
+            confirm: dialog =>{
+                makeRequest(this.props).get('/fort-investment/delete/'+id)
+                    .then(response => {
+                        dialog.setViewCtrl("success")
+                        dialog.setTitle("Removed!")
+                        dialog.setDescription(
+                            <Typography>
+                                {response.data.message}
+                            </Typography>
+                        )
+                        this.props.enqueueSnackbar(response.data.message, {variant: "success"}); 
+                        this.reload()
+                    })
+                    .catch(error => {
+                        handleError({
+                            error: error,
+                            callbacks: {
+                                400: response=>{
+                                    this.props.enqueueSnackbar(response.data.message, {variant: "error"});
+                                    dialog.setViewCtrl("")
+                                }
+                            }
+                        }, this.props);
+                    })
+                    .finally(() => {
+                        //do nothing
+                        this.setState({isLoading:false});
+                    })
+            }
+        })
+    }
 
     render(){
         return(
             <Page
                 className={this.props.classes.root}
-                title="Agents"
+                title="Fortfolio Investment"
                 >
 
                 <Container maxWidth={false}>
-                    <Toolbar />
+                    <Toolbar is_fiat={true} />
                     <Box mt={3}>
-                    <DataLayoutWraper sectionHeading="Agents/Marketers" searchHandler={this.searchHandler} reloadHandler={this.reload}>
+                    <DataLayoutWraper sectionHeading="Fortfolio Investment" searchHandler={this.searchHandler} reloadHandler={this.reload}>
                         <DataViewLoader isLoading={this.state.isLoading} data={this.state.rows}>
                             <TableMaker columns={this.state.columns} page={this.state.page} count={this.state.count} options={this.state.options}>
                                 {this.state.rows.map((row, index) => (
-                                    <TableRow hover key={row.staff_id}>
+                                    <TableRow hover key={row.id}>
                                         <TableCell align="left">
                                             <Box className={this.props.classes.boxOuter}>
-                                                <Avatar 
-                                                    src={''} 
-                                                    className={this.props.classes.avatar}
-                                                >
-                                                    {getInitials(row.first_name + " " + row.last_name)} 
-                                                </Avatar>
                                                 <Box className={this.props.classes.boxInner}>
-                                                    <p className={this.props.classes.name}>{row.first_name + " " + row.last_name}</p>
-                                                    <p className={this.props.classes.position}>{row.gender}</p>
+                                                    <p className={this.props.classes.name}>{row.asset_company}</p>
                                                 </Box>
                                             </Box>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
-                                                {row.agent_code}
+                                                &#8358;{parseFloat(row.amount).toLocaleString()}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
-                                                {row.customers}
+                                                {row.rate}%
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
-                                                {row.active_policy}
+                                                {moment(row.investment_date).format("Do MMMM, YYYY")}
                                             </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {moment(row.maturity_date).format("Do MMMM, YYYY")}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <StatusBadge variant={row.status}>
+                                                {row.status}
+                                            </StatusBadge>
                                         </TableCell>
                                         <TableCell align="center">
                                             <PopoverMenu>
                                                 <IconMenuItem 
-                                                    icon={<Remove color="primary"/>} 
-                                                    text="Remove Agent" 
-                                                    onClick={evt => this.setState({selectedStaff:row, open:true})}
+                                                    icon={<EditIcon color="primary"/>} 
+                                                    text="View/Edit" 
+                                                    onClick={e=>this.props.navigate("/app/edit-fort-investment/"+row.id)}
+                                                />
+                                                <IconMenuItem 
+                                                    icon={<Delete color="primary"/>} 
+                                                    text="Delete"
+                                                    onClick={e=>this.delete(row.id)}
                                                 />
                                             </PopoverMenu>
                                         </TableCell>
@@ -279,4 +346,4 @@ export default connect(mapStateToProps)(
     withSnackbar(
         withPermission(VIEW_PERMISSION_NAME)(
         withStyles(useStyles)(
-            useRouter(Agent)))));
+            withConfirmationDialog(useRouter(Policy))))));

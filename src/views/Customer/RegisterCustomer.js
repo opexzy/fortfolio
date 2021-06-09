@@ -27,7 +27,6 @@ import { uniqueId } from 'lodash';
 import {makeRequest, handleError} from 'src/utils/axios-helper';
 import { withPermission, useRouter } from 'src/utils';
 import qs from 'qs'
-import Agent from '../Agent';
 import { Add, Remove } from '@material-ui/icons';
 
 const useStyles = createStyles((theme) => ({
@@ -72,7 +71,7 @@ class CreateCustomer extends React.Component{
             description: "Make sure you have confirmed the details before you proceed from here",
             close: dialog =>{
                 if(dialog.viewCtrl == "success"){
-                    //this.clearFields()
+                    this.clearFields()
                 }
                 dialog.close()
             },

@@ -103,9 +103,9 @@ class ReceiptPrintTemplate extends Component
             columns: [
                 {label:'Payment Ref'},
                 {label:'Amount'},
-                {label:'Due Date'},
                 {label:'Narration'},
-                {label:'Date Paid'},
+                {label:'Due Date'},
+                {label:'Payment Date'},
             ],
             rows: [],
             count: 0,
@@ -139,35 +139,36 @@ class ReceiptPrintTemplate extends Component
                 <Box>
                     <Typography style={{textAlign:"center", fontSize:13, color:green[700]}}>PAYMENT HISTORY</Typography>
                 </Box>
-                <Box>
+                <Box minHeight="250">
                     <TableMaker columns={this.state.columns} print page={this.state.page} count={this.state.count}>
-                        {this.props.data.payment_history ? (
-                            this.props.data.payment_history.map((row,index)=>(
+                        {this.props.data.history.length > 0 ? (
+                            this.props.data.history.map((row,index)=>(
                                 <TableRow hover key={index}>
                                     <TableCell style={{fontSize:11}} align="left">{row.id}</TableCell>
-                                    <TableCell style={{fontSize:11}} align="left">&#8358;{parseFloat(row.amount).toLocaleString({minimumFractionDigits:2})}</TableCell>
+                                    {this.props.is_fiat ? (
+                                        <TableCell style={{fontSize:11}} align="left">&#8358;{parseFloat(row.amount).toLocaleString({minimumFractionDigits:2})}</TableCell>
+                                    ) : (
+                                        <TableCell style={{fontSize:11}} align="left">${parseFloat(row.amount).toLocaleString({minimumFractionDigits:2})}</TableCell>
+                                    )}
+                                    <TableCell style={{fontSize:11}} align="left">{row.type == "interest" ? " Interest Payment" : "Capital Refund"}</TableCell>
                                     <TableCell style={{fontSize:11}} align="left">{moment(row.payment_date).format("MMMM Do YYYY")}</TableCell>
-                                    <TableCell style={{fontSize:11}} align="left">{row.type == "interest" ? row.roi_payment_frequency+" Interest Payment" : "Capital Payment"}</TableCell>
                                     <TableCell style={{fontSize:11}} align="left">{moment(row.timestamp).format("MMMM Do YYYY")}</TableCell>
                                 </TableRow>
                             ))
                         ) : (
-                            <Box width="100%" height="250px" justifyContent="center" alignItems="center">
-                                <Typography style={{color:grey[600], fontSize:13}}>No payment made on this policy yet</Typography>
+                            <Box width="100%" justifyContent="center" alignItems="center">
+                                <Typography style={{color:grey[600], width:"100%", fontSize:13, textAlign:"center", marginTop:15}}>
+                                        No payment recorded for this Investment Yet
+                                </Typography>
                             </Box>
                         )}
                     </TableMaker>
                     <Box>
-                        <Typography style={{marginTop:20, fontSize:13, fontWeight:700, textAlign:"right"}}>Total Receipt: &#8358;{parseFloat(this.props.data.total_amount).toLocaleString({minimumFractionDigits:2})}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography style={{marginTop:10, fontSize:12, color:red[700]}}>
-                            *Kindly reconcile the above statement of account on your policy. If there is any payment not reflecting
-                            above, kindly supply us with details of such payment so as to assist us to reconcile your payment records rightly
-                        </Typography>
-                        <Typography style={{marginTop:10, fontSize:12, color:red[700]}}>
-                            Thank You
-                        </Typography>
+                        {this.props.is_fiat ? (
+                            <Typography style={{marginTop:20, fontSize:12, fontWeight:700, textAlign:"right"}}>Total: &#8358;{parseFloat(this.props.data.total_amount).toLocaleString({minimumFractionDigits:2})}</Typography>
+                        ) : (
+                            <Typography style={{marginTop:20, fontSize:12, fontWeight:700, textAlign:"right"}}>Total: ${parseFloat(this.props.data.total_amount).toLocaleString({minimumFractionDigits:2})}</Typography>
+                        )}
                     </Box>
                 </Box>
             </Container>

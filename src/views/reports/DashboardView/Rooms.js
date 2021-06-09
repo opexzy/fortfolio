@@ -11,7 +11,7 @@ import {
   makeStyles,
   colors
 } from '@material-ui/core';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import AttachMoneyIcon from '@material-ui/icons/ArrowUpward';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -44,7 +44,7 @@ const TotalProfit = ({ className, data, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              AVAILABLE ROOMS
+              MEDIA CAMPAIGNS
             </Typography>
             <Typography
               color="textPrimary"

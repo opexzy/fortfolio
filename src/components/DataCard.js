@@ -14,7 +14,6 @@ import {
 } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MoneyIcon from '@material-ui/icons/Money';
-import {connect} from "react-redux"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: colors.red[600],
-    height: 56,
-    width: 56
+    height: 40,
+    width: 40
   },
   differenceIcon: {
     color: colors.red[900]
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Budget = ({ className, data, ...rest }) => {
+const Budget = ({ className, title, value, extra, is_fiat, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -51,21 +50,36 @@ const Budget = ({ className, data, ...rest }) => {
           <Grid item>
             <Typography
               color="textSecondary"
-              gutterBottom
-              variant="h6"
+              variant="caption"
+              style={{textTransform:"uppercase", fontSize:10}}
             >
-              FIAT INTEREST PAID
+              {title}
             </Typography>
-            <Typography
-              color="textPrimary"
-              variant="h3"
-            >
-              &#8358;{parseFloat(data).toLocaleString()}
-            </Typography>
+            {is_fiat ? (
+              <Typography
+                color="textPrimary"
+                variant="h4"
+                style={{paddingTop:15, fontSize:12}}
+              >
+                &#8358;{value}
+              </Typography>
+            ) : (
+              <Typography
+                color="textPrimary"
+                variant="h4"
+                style={{paddingTop:15, fontSize:12}}
+              >
+                ${value}
+              </Typography>
+            )}
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <MoneyIcon />
+              {(extra || extra >= 0) ? (
+                <p style={{fontSize:10}}>{extra}</p>
+              ) : (
+                <MoneyIcon />
+              )}
             </Avatar>
           </Grid>
         </Grid>

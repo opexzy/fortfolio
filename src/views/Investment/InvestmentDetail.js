@@ -108,6 +108,24 @@ class InvestmentDetail extends Component
             }
         return frequency_roi;
     }
+
+    unitToCurrency = (unit) =>{
+        if(unit == 'btc'){
+            return 'Bitcoin (BTC)'
+        }
+        else if(unit == 'eth'){
+            return 'Ethereum (ETH)'
+        }
+        else if(unit == 'bch'){
+            return 'Bitcoin Cash (BCH)'
+        }
+        else if(unit == 'xrp'){
+            return 'Ripple (XRP)'
+        }
+        else{
+            return 'TetherUS (USDT)'
+        }
+    }
     render(){
         return(
             <Container style={{width: "19cm", marginTop:30, padding:10}}>
@@ -141,23 +159,45 @@ class InvestmentDetail extends Component
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Amount Invested</Typography>
-                            <Typography variant="caption" component="p">{parseFloat(this.props.data.amount).toLocaleString()}</Typography>
+                            {this.props.is_fiat ? (
+                                <Typography variant="caption" component="p">&#8358;{parseFloat(this.props.data.amount).toLocaleString()}</Typography>
+                            ) : (
+                                <Typography variant="caption" component="p">${parseFloat(this.props.data.amount).toLocaleString()}</Typography>
+                            )}
                         </Grid>
+                        {!this.props.is_fiat && 
+                        <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
+                            <Typography variant="h6" component="h6">Crypto Asset</Typography>
+                            <Typography variant="caption" component="p">{this.unitToCurrency(this.props.data.asset)}</Typography>
+                        </Grid>
+                        }
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Rate</Typography>
                             <Typography variant="caption" component="p">{this.props.data.rate}%</Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">ROI Payment Frequency</Typography>
-                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.calcFRoi()).toLocaleString()} ({this.props.data.roi_payment_frequency})</Typography>
+                            {this.props.is_fiat ? (
+                                <Typography variant="caption" component="p">&#8358;{parseFloat(this.calcFRoi()).toLocaleString()} ({this.props.data.roi_payment_frequency})</Typography>
+                            ) : (
+                                <Typography variant="caption" component="p">${parseFloat(this.calcFRoi()).toLocaleString()} ({this.props.data.roi_payment_frequency})</Typography>
+                            )}
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Total Interest</Typography>
-                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.props.data.total_interest).toLocaleString()}</Typography>
+                            {this.props.is_fiat ? (
+                                <Typography variant="caption" component="p">&#8358;{parseFloat(this.props.data.total_interest).toLocaleString()}</Typography>
+                            ) : (
+                                <Typography variant="caption" component="p">${parseFloat(this.props.data.total_interest).toLocaleString()}</Typography>
+                            )}
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Total Amount</Typography>
-                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.props.data.total_amount).toLocaleString()}</Typography>
+                            {this.props.is_fiat ? (
+                                <Typography variant="caption" component="p">&#8358;{parseFloat(this.props.data.total_amount).toLocaleString()}</Typography>
+                            ) : (
+                                <Typography variant="caption" component="p">${parseFloat(this.props.data.total_amount).toLocaleString()}</Typography>
+                            )}
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Duration</Typography>
