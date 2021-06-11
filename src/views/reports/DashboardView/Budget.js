@@ -54,7 +54,7 @@ const Budget = ({ className, data, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              FIAT INTEREST PAID
+              TOTAL INTEREST PAID
             </Typography>
             <Typography
               color="textPrimary"

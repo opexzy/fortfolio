@@ -10,27 +10,27 @@ const appConfig = {
     /**
      * Company Name
      */
-    company_name: "Bethsaida Micro Insurance Limited",
+    company_name: "Hartfield Investment Limited",
 
     /**
      * Company Address Line 1
      */
-    company_address_line1: "Bethsaida Place, 31, Afolabi Aina Street, (Royal Bed Estate) off Allen Avenue,",
+    company_address_line1: "2nd Floor, Suite 01 & 02 K-CITY Plaza, Plot 528,",
 
     /**
      * Company Address Line 2
      */
-     company_address_line2: "before new Alade Market, Ikeja Lagos State",
+     company_address_line2: "Amino Kano Crescent Wuse II. FCT-Abuja. Nigeria",
 
     /**
      * Company Telephone No
      */
-    company_mobile: "09073825753",
+    company_mobile: "+234 (0) 9083230446",
 
     /**
      * Company Email Address
      */
-    company_email: "info@bethsaidamicroinsltd.com"
+    company_email: "info@hartfieldgroups.com"
 }
 
 export default appConfig

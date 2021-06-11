@@ -211,8 +211,9 @@ class CreateStaff extends React.Component{
                                 select
                             >
                                 <MenuItem value="Administrator">Administrator</MenuItem>
-                                <MenuItem value="Account Officer">Acount Officer</MenuItem>
-                                <MenuItem value="General Manager">General Manager</MenuItem>
+                                <MenuItem value="Account Officer">Acountant</MenuItem>
+                                <MenuItem value="Frontdesk Officer">Frontdesk Officer</MenuItem>
+                                <MenuItem value="Managing Director">Managing Director</MenuItem>
                                 <MenuItem value="Marketer">Marketer/Agent</MenuItem>
                             </TextField>
                         </Grid>

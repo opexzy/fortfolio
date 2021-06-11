@@ -104,9 +104,9 @@ class Investment extends React.Component {
         this.state = {
             columns: [
                 {label:'Full Name'},
+                {label:'Account No'},
                 {label:'Amount Invested'},
                 {label:'Rate'},
-                {label:'Investment Date'},
                 {label:'Duration'},
                 {label:'Maturity Date'},
                 {label:'Status'},
@@ -255,7 +255,7 @@ class Investment extends React.Component {
     }
 
     fetch_investment_report = () =>{
-        makeRequest(this.props).get('investment/report/fiat'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
+        makeRequest(this.props).get('investment/report'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
         .then(response => {
             this.setState({report: response.data.data.report})
         })
@@ -274,7 +274,7 @@ class Investment extends React.Component {
 
     onDateChange = evt =>{
         this.setState({report:null});
-        makeRequest(this.props).get('investment/report/fiat/'+evt.target.value)
+        makeRequest(this.props).get('investment/report/'+evt.target.value)
         .then(response => {
             this.setState({report: response.data.data.report})
         })
@@ -482,17 +482,17 @@ class Investment extends React.Component {
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
+                                                {row.account_no}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
                                                 &#8358;{parseFloat(row.amount).toLocaleString()}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>
                                                 {row.rate}%
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography className={this.props.classes.typo}>
-                                                {moment(row.investment_date).format("Do MMMM, YYYY")}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="center">

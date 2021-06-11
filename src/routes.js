@@ -12,15 +12,8 @@ import CustomerView from 'src/views/Customer'
 import EditCustomerView from 'src/views/Customer/EditCustomer'
 import RegisterCustomerView from 'src/views/Customer/RegisterCustomer'
 import InvestmentView from "src/views/Investment"
-import CryptoInvestmentView from "src/views/Investment/CryptoInvestment"
 import AddInvestmentView from "src/views/Investment/AddInvestment"
 import PaymentView from "src/views/Payment"
-import FortInvestmentView from "src/views/FortInvestment"
-import AddFortInvestmentView from "src/views/FortInvestment/AddInvestment"
-import EditFortInvestmentView from "src/views/FortInvestment/EditInvestment"
-import SocialContractView from "src/views/SocialMedia"
-import AddContractView from "src/views/SocialMedia/AddContract"
-import EditContractView from "src/views/SocialMedia/EditContract"
 
 const routes = [
   {
@@ -35,14 +28,7 @@ const routes = [
       { path: 'register-customer', element: <RegisterCustomerView /> },
       { path: 'edit-customer/:id', element: <EditCustomerView /> },
       { path: 'investments', element: <InvestmentView /> },
-      { path: 'crypto-investments', element: <CryptoInvestmentView /> },
       { path: 'add-investment', element: <AddInvestmentView /> },
-      { path: 'fort-investments', element: <FortInvestmentView /> },
-      { path: 'add-fort-investment', element: <AddFortInvestmentView /> },
-      { path: 'edit-fort-investment/:id', element: <EditFortInvestmentView /> },
-      { path: 'social-media', element: <SocialContractView /> },
-      { path: 'add-social-contract', element: <AddContractView /> },
-      { path: 'edit-social-contract/:id', element: <EditContractView /> },
       { path: 'payments', element: <PaymentView /> },
       { path: '*', element: <Navigate replace={false} to="/404" /> }
     ]

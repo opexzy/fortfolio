@@ -44,7 +44,7 @@ const TotalProfit = ({ className, data, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              MEDIA CAMPAIGNS
+              ACTIVE INVESTMENTS
             </Typography>
             <Typography
               color="textPrimary"

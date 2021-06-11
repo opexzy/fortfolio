@@ -71,7 +71,7 @@ class CreateCustomer extends React.Component{
             description: "Make sure you have confirmed the details before you proceed from here",
             close: dialog =>{
                 if(dialog.viewCtrl == "success"){
-                    this.clearFields()
+                    this.props.navigate("/app/customers");
                 }
                 dialog.close()
             },
@@ -316,4 +316,4 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(
     withSnackbar(
         withStyles(useStyles)(
-            withPermission(VIEW_PERMISSION_NAME)(withConfirmationDialog(CreateCustomer)))));
+            withPermission(VIEW_PERMISSION_NAME)(withConfirmationDialog(useRouter(CreateCustomer))))));

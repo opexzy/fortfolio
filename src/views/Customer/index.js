@@ -87,6 +87,7 @@ class Customer extends React.Component {
         this.state = {
             columns: [
                 {label:'Full Name'},
+                {label:'Account No'},
                 {label:'Phone Number'},
                 {label:'Email'},
                 {label:'Staff/Marketer'},
@@ -280,6 +281,11 @@ class Customer extends React.Component {
                                                     <p className={this.props.classes.position}>{row.gender}</p>
                                                 </Box>
                                             </Box>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {row.account_no}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography className={this.props.classes.typo}>

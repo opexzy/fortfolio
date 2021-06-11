@@ -66,8 +66,6 @@ class AddInvestment extends React.Component{
             duration: null,
             investment_date: null,
             maturity_date: null,
-            type: 'fiat',
-            asset: null,
             text: "",
             send_alert: true,
             customers: [],
@@ -215,42 +213,10 @@ class AddInvestment extends React.Component{
                             <TextField
                                 fullWidth
                                 variant="outlined"
-                                name="type"
-                                label="Investment Type"
-                                value={this.state.type}
-                                onChange={this.onChange}
-                                select
-                            >
-                                <MenuItem value="fiat">Fiat Money</MenuItem>
-                                <MenuItem value="crypto">Crypto-Currency</MenuItem>
-                            </TextField>
-                        </Grid>
-                        {this.state.type == 'crypto' && <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                name="asset"
-                                label="Crypto Asset"
-                                value={this.state.asset}
-                                onChange={this.onChange}
-                                select
-                            >
-                                <MenuItem value="btc">Bitcoin (BTC)</MenuItem>
-                                <MenuItem value="eth">Ethereum (ETH)</MenuItem>
-                                <MenuItem value="bch">Bitcoin Cash (BCH)</MenuItem>
-                                <MenuItem value="usdt">TetherUS (USDT)</MenuItem>
-                                <MenuItem value="xrp">Ripple (XRP)</MenuItem>
-                            </TextField>
-                        </Grid>}
-                        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
                                 name="amount"
                                 label="amount"
                                 value={this.state.amount}
                                 onChange={this.onChange}
-                                helperText={this.state.type=="fiat" ? "Amount in Naira" : "Amount in Dollar"}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
@@ -313,7 +279,7 @@ class AddInvestment extends React.Component{
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Amount Invested</Typography>
-                            <Typography variant="caption" component="p">{parseFloat(this.state.amount).toLocaleString()}</Typography>
+                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.state.amount).toLocaleString()}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Rate</Typography>
@@ -321,15 +287,15 @@ class AddInvestment extends React.Component{
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">ROI Payment Frequency</Typography>
-                            <Typography variant="caption" component="p">{this.state.frequency_roi.toLocaleString()} ({this.state.frequency})</Typography>
+                            <Typography variant="caption" component="p">&#8358;{this.state.frequency_roi.toLocaleString()} ({this.state.frequency})</Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Total Interest</Typography>
-                            <Typography variant="caption" component="p">{parseFloat(this.state.total_interest).toLocaleString()}</Typography>
+                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.state.total_interest).toLocaleString()}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Total Amount</Typography>
-                            <Typography variant="caption" component="p">{parseFloat(this.state.total_amount).toLocaleString()}</Typography>
+                            <Typography variant="caption" component="p">&#8358;{parseFloat(this.state.total_amount).toLocaleString()}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Duration</Typography>

@@ -132,7 +132,6 @@ class InvestmentDetail extends Component
                 <Box display="flex" flexDirection="row" justifyContent="space-between">
                     <Box>
                         <Avatar
-                            src="/logo-main.png"
                             style={{height: 100, width: 100}}
                             variant="rounded"
                         />
@@ -155,6 +154,12 @@ class InvestmentDetail extends Component
                             <Typography variant="h6" component="h6">Full Name</Typography>
                             <Typography variant="caption" component="p">
                                 {`${this.props.data.customer.surname} ${this.props.data.customer.first_name} ${this.props.data.customer.other_name}`}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
+                            <Typography variant="h6" component="h6">Account No.</Typography>
+                            <Typography variant="caption" component="p">
+                                {`${this.props.data.customer.account_no}`}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>

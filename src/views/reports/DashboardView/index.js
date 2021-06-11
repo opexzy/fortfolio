@@ -38,10 +38,8 @@ class Dashboard extends React.Component{
     super(props)
     this.state = {
       data: {
-        media_campaign:"----",
-        fortfolio_investment:"----",
-        fiat_interest:"----",
-        crypto_interest:"----",
+        active_investment:"----",
+        total_interest:"----",
         customers:"----",
       }
     }
@@ -105,7 +103,7 @@ class Dashboard extends React.Component{
               xl={4}
               xs={12}
             >
-              <Budget data={this.state.data.fiat_interest} />
+              <Budget data={this.state.data.total_interest} />
             </Grid>
 
             <Grid
@@ -115,27 +113,7 @@ class Dashboard extends React.Component{
               xl={4}
               xs={12}
             >
-              <TasksProgress data={this.state.data.crypto_interest} />
-            </Grid>
-
-            <Grid
-              item
-              lg={4}
-              sm={6}
-              xl={4}
-              xs={12}
-            >
-              <TotalProfit data={this.state.data.fortfolio_investment} />
-            </Grid>
-
-            <Grid
-              item
-              lg={4}
-              sm={6}
-              xl={4}
-              xs={12}
-            >
-              <Rooms data={this.state.data.media_campaign} />
+              <Rooms data={this.state.data.active_investment} />
             </Grid>
           </Grid>
         </Container>

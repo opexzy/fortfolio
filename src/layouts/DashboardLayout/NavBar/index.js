@@ -51,17 +51,7 @@ const items = [
     href: '/app/payments',
     icon: Book,
     title: 'Payments'
-  },
-  {
-    href: '/app/fort-investments',
-    icon: Folder,
-    title: 'Forfolio Investment'
-  },
-  {
-    href: '/app/social-media',
-    icon: Folder,
-    title: 'Social Media'
-  },
+  }
 ];
 
 const useStyles = makeStyles(() => ({
