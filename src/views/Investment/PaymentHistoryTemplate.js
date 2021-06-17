@@ -123,14 +123,15 @@ class ReceiptPrintTemplate extends Component
                 <Box display="flex" flexDirection="row" justifyContent="space-between">
                     <Box>
                         <Avatar
-                            src="/logo-main.png"
+                            src="/fortfolio.png"
                             style={{height: 100, width: 100}}
                             variant="rounded"
                         />
                     </Box>
                     <Box>
                         <Typography style={{color:red[600]}} variant="h2" component="h2">{AppConfig.company_name}</Typography>
-                        <Typography style={{color:grey[600], fontSize:13}}>{AppConfig.company_address}</Typography>
+                        <Typography style={{color:grey[600], fontSize:13}}>{AppConfig.company_address_line1}</Typography>
+                        <Typography style={{color:grey[600], fontSize:13}}>{AppConfig.company_address_line2}</Typography>
                         <Typography style={{color:grey[600], fontSize:13}}>Tel: {AppConfig.company_mobile}</Typography>
                         <Typography style={{color:grey[600], fontSize:13}}>Email: {AppConfig.company_email}</Typography>
                     </Box>

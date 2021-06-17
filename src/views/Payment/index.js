@@ -325,7 +325,7 @@ class Customer extends React.Component {
 
                 <Container maxWidth={false}>
                     <Box mt={3}>
-                    <DataLayoutWraper sectionHeading="Customers" searchHandler={this.searchHandler} reloadHandler={this.reload}>
+                    <DataLayoutWraper sectionHeading="Payment History" searchHandler={this.searchHandler} reloadHandler={this.reload}>
                         <DataViewLoader isLoading={this.state.isLoading} data={this.state.rows}>
                             <TableMaker columns={this.state.columns} page={this.state.page} count={this.state.count} options={this.state.options}>
                                 {this.state.rows.map((row, index) => (

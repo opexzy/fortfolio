@@ -39,7 +39,7 @@ import {
     DialogActions,
     CircularProgress,
     Grid,
-    TextField,
+    TextField
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab'
 import { deepOrange } from '@material-ui/core/colors';
@@ -52,12 +52,9 @@ import { setSelectedUser } from 'src/actions'
 import DataLayoutWraper from 'src/layouts/DataLayoutWraper';
 import qs from 'qs'
 import moment from 'moment'
-import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
-import InvestmentDetail from './InvestmentDetail'
-import PaymentPrintTemplate from './PaymentHistoryTemplate';
 import AppConfig from 'src/config/appConfig'
-import DataCard from 'src/components/DataCard'
 import withConfirmationDialog from 'src/utils/confirmationDialog'
+import DataCard from 'src/components/DataCard'
 
 const useStyles = createStyles( theme => ({
     root: {
@@ -98,18 +95,16 @@ const useStyles = createStyles( theme => ({
 
 const VIEW_PERMISSION_NAME = [];
 
-class CryptoInvestment extends React.Component {
+class Policy extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             columns: [
-                {label:'Full Name'},
-                {label:'Amount Invested'},
-                {label:'Rate'},
-                {label:'Investment Date'},
-                {label:'Duration'},
-                {label:'Maturity Date'},
-                {label:'Status'},
+                {label:'Title'},
+                {label:'Type'},
+                {label:'Amount'},
+                {label:'Date Made'},
+                {label:'Timestamp'},
                 {label:'Action'}
             ],
             rows: [],
@@ -130,14 +125,14 @@ class CryptoInvestment extends React.Component {
             isLoadingPayment: false,
             investmentData:null,
             paymentData:null,
-            report: null,
+            report:null,
             selected_date: null
         }
     }
     
     onChangePage = (event, page) =>{
         this.setState({isLoading:true, page: page})
-        makeRequest(this.props).post('/investment/list/' + (page+1) + '?type=crypto', qs.stringify(this.state.filters))
+        makeRequest(this.props).post('/income-expenses/list/' + (page+1), qs.stringify(this.state.filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -167,8 +162,9 @@ class CryptoInvestment extends React.Component {
     }
 
     componentDidMount(){
-        this.fetch_investment_report()
-        makeRequest(this.props).post('/investment/list'+ '?type=crypto')
+        this.fetch_report()
+        //check if token is valid
+        makeRequest(this.props).post('/income-expenses/list')
             .then(response => {
             this.setState({rows: response.data.data.list, count: response.data.data.count})
             })
@@ -190,7 +186,7 @@ class CryptoInvestment extends React.Component {
 
     searchHandler = filters =>{
         this.setState({isLoading:true, page: 0})
-        makeRequest(this.props).post('/investment/list'+ '?type=crypto', qs.stringify(filters))
+        makeRequest(this.props).post('/income-expenses/list', qs.stringify(filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -231,78 +227,20 @@ class CryptoInvestment extends React.Component {
         this.componentDidMount()
     }
 
-    viewHistory = (id)=>{
-        this.setState({openPaymentPrint:true,isLoadingPayment:true})
-        makeRequest(this.props).get('payment/history/'+id)
-        .then(response => {
-            this.setState({paymentData: response.data.data})
-        })
-        .catch(error => {
-            handleError({
-                error: error,
-                callbacks: {
-                400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
-                }
-            }, this.props);
-        })
-        .finally(() => {
-            this.setState({isLoadingPayment:false})
-        })
-    }
-
     viewInvestment = (data) => {
         this.setState({openPrint:true, investmentData:data})
-    }
-
-    fetch_investment_report = () =>{
-        this.setState({report:null});
-        makeRequest(this.props).get('investment/report/crypto'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
-        .then(response => {
-            this.setState({report: response.data.data.report})
-        })
-        .catch(error => {
-            handleError({
-                error: error,
-                callbacks: {
-                    400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
-                }
-            }, this.props);
-        })
-        .finally(() => {
-            this.setState({isLoadingPayment:false})
-        })
-    }
-
-    onDateChange = evt =>{
-        this.setState({report:null});
-        makeRequest(this.props).get('investment/report/crypto/'+evt.target.value)
-        .then(response => {
-            this.setState({report: response.data.data.report})
-        })
-        .catch(error => {
-            handleError({
-                error: error,
-                callbacks: {
-                    400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
-                }
-            }, this.props);
-        })
-        .finally(() => {
-            this.setState({isLoadingPayment:false})
-        })
-      this.setState({selected_date: evt.target.value})
     }
 
     delete = (id) =>{
         this.props.openDialog({
             viewCtrl: "warning",
-            title: "Confirm Investment Delete",
-            description: "All payments associated with this investment will be deleted",
+            title: "Confirm Record Delete",
+            description: "Make sure you have confirmed the details before you proceed from here",
             close: dialog =>{
                 dialog.close()
             },
             confirm: dialog =>{
-                makeRequest(this.props).get('/investment/delete/'+id)
+                makeRequest(this.props).get('/income-expenses/delete/'+id)
                     .then(response => {
                         dialog.setViewCtrl("success")
                         dialog.setTitle("Removed!")
@@ -333,52 +271,54 @@ class CryptoInvestment extends React.Component {
         })
     }
 
+    fetch_report = () =>{
+        this.setState({report:null});
+        makeRequest(this.props).get('income-expenses/report'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
+        .then(response => {
+            this.setState({report: response.data.data.report})
+        })
+        .catch(error => {
+            handleError({
+                error: error,
+                callbacks: {
+                    400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
+                }
+            }, this.props);
+        })
+        .finally(() => {
+            this.setState({isLoadingPayment:false})
+        })
+    }
+
+    onDateChange = evt =>{
+        this.setState({report:null});
+        makeRequest(this.props).get('income-expenses/report/'+evt.target.value)
+        .then(response => {
+            this.setState({report: response.data.data.report})
+        })
+        .catch(error => {
+            handleError({
+                error: error,
+                callbacks: {
+                    400: response=>{ this.props.enqueueSnackbar(response.data.message, {variant: "error"}); }
+                }
+            }, this.props);
+        })
+        .finally(() => {
+            this.setState({isLoadingPayment:false})
+        })
+      this.setState({selected_date: evt.target.value})
+    }
+
     render(){
         return(
             <Page
                 className={this.props.classes.root}
-                title="Investment"
+                title="Income & Expenses"
                 >
-                <Dialog open={this.state.openPrint} maxWidth="md" fullWidth onClose={e=>this.setState({openPrint:false})}>
-                    <DialogTitle>Investment Details</DialogTitle>
-                    <DialogContent>
-                        <InvestmentDetail is_fiat={false} data={this.state.investmentData} ref={el => (this.componentRef = el)}/>
-                    </DialogContent>
-                    <DialogActions>
-                        <ReactToPrint content={() => this.componentRef}>
-                            <PrintContextConsumer>
-                                {({ handlePrint }) => (
-                                    <Button  onClick={handlePrint} variant="contained" color="primary">Print</Button>
-                                )}
-                            </PrintContextConsumer>
-                        </ReactToPrint>
-                    </DialogActions>
-                </Dialog>
-
-                <Dialog open={this.state.openPaymentPrint} maxWidth="md" fullWidth onClose={e=>this.setState({openPaymentPrint:false})}>
-                    <DialogTitle>Payment History</DialogTitle>
-                    <DialogContent>
-                        {this.state.isLoadingPayment ? (
-                            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                                <CircularProgress/>
-                            </Box>
-                        ):(
-                            <PaymentPrintTemplate is_fiat={false} data={this.state.paymentData} ref={el => (this.componentRef = el)}/>
-                        )}
-                    </DialogContent>
-                    <DialogActions>
-                        <ReactToPrint content={() => this.componentRef}>
-                            <PrintContextConsumer>
-                                {({ handlePrint }) => (
-                                    <Button  onClick={handlePrint} variant="contained" color="primary">Print</Button>
-                                )}
-                            </PrintContextConsumer>
-                        </ReactToPrint>
-                    </DialogActions>
-                </Dialog>
 
                 <Container maxWidth={false}>
-                    <Toolbar is_fiat={false} />
+                    <Toolbar is_fiat={true} />
                     <Grid container spacing={2} style={{marginBottom:10, marginTop:15}}>
                         <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                             <TextField
@@ -397,10 +337,9 @@ class CryptoInvestment extends React.Component {
                         <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                             {this.state.report ? (
                                 <DataCard 
-                                title="ACTIVE INVESTMENTS" 
-                                value={parseFloat(this.state.report.active_investment_amount).toLocaleString()}
-                                extra={this.state.report.active_investment_no}
-                                is_fiat={false}
+                                title="INCOME THIS MONTH" 
+                                value={parseFloat(this.state.report.income_amount).toLocaleString()}
+                                extra={this.state.report.income_no}
                             />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -409,58 +348,10 @@ class CryptoInvestment extends React.Component {
                         <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                             {this.state.report ? (
                                 <DataCard 
-                                    title="COMPLETED INVESTMENTS" 
-                                    value={parseFloat(this.state.report.completed_investment_amount).toLocaleString()}
-                                    extra={this.state.report.completed_investment_no}
-                                    is_fiat={false}
-                                />
-                            ) : (
-                                <Skeleton animation="wave" height="100%" width="100%" />
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                            {this.state.report ? (
-                                <DataCard 
-                                    title="INTEREST DUE THIS MONTH" 
-                                    value={parseFloat(this.state.report.interest_due_amount).toLocaleString()}
-                                    extra={this.state.report.interest_due_no}
-                                    is_fiat={false}
-                                />
-                            ) : (
-                                <Skeleton animation="wave" height="100%" width="100%" />
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                            {this.state.report ? (
-                                <DataCard 
-                                    title="INTEREST PAID THIS MONTH" 
-                                    value={parseFloat(this.state.report.interest_paid_amount).toLocaleString()}
-                                    extra={this.state.report.interest_paid_no}
-                                    is_fiat={false}
-                                />
-                            ) : (
-                                <Skeleton animation="wave" height="100%" width="100%" />
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                            {this.state.report ? (
-                                <DataCard 
-                                    title="CAPITAL DUE THIS MONTH" 
-                                    value={parseFloat(this.state.report.capital_due_amount).toLocaleString()}
-                                    extra={this.state.report.capital_due_no}
-                                    is_fiat={false}
-                                />
-                            ) : (
-                                <Skeleton animation="wave" height="100%" width="100%" />
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                            {this.state.report ? (
-                                <DataCard 
-                                    title="CAPITAL PAID THIS MONTH" 
-                                    value={parseFloat(this.state.report.capital_paid_amount).toLocaleString()}
-                                    extra={this.state.report.capital_paid_no}
-                                    is_fiat={false}
+                                    title="EXPENSES THIS MONTH" 
+                                    value={parseFloat(this.state.report.expenses_amount).toLocaleString()}
+                                    extra={this.state.report.expenses_no}
+
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -468,71 +359,44 @@ class CryptoInvestment extends React.Component {
                         </Grid>
                     </Grid>
                     <Box mt={3}>
-                    <DataLayoutWraper sectionHeading="Customers" searchHandler={this.searchHandler} reloadHandler={this.reload}>
+                    <DataLayoutWraper sectionHeading="Income & Expenses" searchHandler={this.searchHandler} reloadHandler={this.reload}>
                         <DataViewLoader isLoading={this.state.isLoading} data={this.state.rows}>
                             <TableMaker columns={this.state.columns} page={this.state.page} count={this.state.count} options={this.state.options}>
                                 {this.state.rows.map((row, index) => (
                                     <TableRow hover key={row.id}>
                                         <TableCell align="left">
                                             <Box className={this.props.classes.boxOuter}>
-                                                <Avatar 
-                                                    src={''} 
-                                                    className={this.props.classes.avatar}
-                                                >
-                                                    {getInitials(row.customer.first_name + " " + row.customer.surname)} 
-                                                </Avatar>
                                                 <Box className={this.props.classes.boxInner}>
-                                                    <p className={this.props.classes.name}>{row.customer.surname + " " + row.customer.first_name + " " + row.customer.other_name}</p>
-                                                    <p className={this.props.classes.position}>Ref: #{row.id}</p>
+                                                    <p className={this.props.classes.name}>{row.title}</p>
                                                 </Box>
                                             </Box>
                                         </TableCell>
                                         <TableCell align="center">
-                                            <Typography className={this.props.classes.typo}>
-                                                ${parseFloat(row.amount).toLocaleString()}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography className={this.props.classes.typo}>
-                                                {row.rate}%
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography className={this.props.classes.typo}>
-                                                {moment(row.investment_date).format("Do MMMM, YYYY")}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography className={this.props.classes.typo}>
-                                                {row.duration} Days
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography className={this.props.classes.typo}>
-                                                {moment(row.maturity_date).format("Do MMMM, YYYY")}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <StatusBadge variant={row.status}>
-                                                {row.status}
+                                            <StatusBadge variant={row.type}>
+                                                {row.type}
                                             </StatusBadge>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                &#8358;{parseFloat(row.amount).toLocaleString()}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {moment(row.date_made).format("Do MMMM, YYYY")}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Typography className={this.props.classes.typo}>
+                                                {moment(row.timestamp).format("Do MMMM, YYYY")}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell align="center">
                                             <PopoverMenu>
                                                 <IconMenuItem 
-                                                    icon={<EditIcon color="primary"/>} 
-                                                    text="View" 
-                                                    onClick={e=>this.viewInvestment(row)}
-                                                />
-                                                <IconMenuItem 
                                                     icon={<Delete color="primary"/>} 
-                                                    text="Delete" 
+                                                    text="Delete"
                                                     onClick={e=>this.delete(row.id)}
-                                                />
-                                                <IconMenuItem 
-                                                    icon={<History color="primary"/>} 
-                                                    text="History"
-                                                    onClick={e=>this.viewHistory(row.id)} 
                                                 />
                                             </PopoverMenu>
                                         </TableCell>
@@ -556,4 +420,4 @@ export default connect(mapStateToProps)(
     withSnackbar(
         withPermission(VIEW_PERMISSION_NAME)(
         withStyles(useStyles)(
-            useRouter(withConfirmationDialog(CryptoInvestment))))));
+            withConfirmationDialog(useRouter(Policy))))));

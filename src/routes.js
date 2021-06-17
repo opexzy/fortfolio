@@ -21,6 +21,8 @@ import EditFortInvestmentView from "src/views/FortInvestment/EditInvestment"
 import SocialContractView from "src/views/SocialMedia"
 import AddContractView from "src/views/SocialMedia/AddContract"
 import EditContractView from "src/views/SocialMedia/EditContract"
+import IncomeExpensesView from "src/views/IncomeExpenses"
+import AddIncomeExpensesView from "src/views/IncomeExpenses/AddIncomeExpenses"
 
 const routes = [
   {
@@ -44,6 +46,8 @@ const routes = [
       { path: 'add-social-contract', element: <AddContractView /> },
       { path: 'edit-social-contract/:id', element: <EditContractView /> },
       { path: 'payments', element: <PaymentView /> },
+      { path: 'income-expenses', element: <IncomeExpensesView /> },
+      { path: 'add-income-expenses', element: <AddIncomeExpensesView /> },
       { path: '*', element: <Navigate replace={false} to="/404" /> }
     ]
   },

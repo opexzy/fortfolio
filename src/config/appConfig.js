@@ -10,27 +10,27 @@ const appConfig = {
     /**
      * Company Name
      */
-    company_name: "Bethsaida Micro Insurance Limited",
+    company_name: "Fortfolio Limited",
 
     /**
      * Company Address Line 1
      */
-    company_address_line1: "Bethsaida Place, 31, Afolabi Aina Street, (Royal Bed Estate) off Allen Avenue,",
+    company_address_line1: "Road 5, J269 Ikota shopping complex, Ajah lagos,",
 
     /**
      * Company Address Line 2
      */
-     company_address_line2: "before new Alade Market, Ikeja Lagos State",
+     company_address_line2: "Lagos state, Nigeria",
 
     /**
      * Company Telephone No
      */
-    company_mobile: "09073825753",
+    company_mobile: "+2348120912268",
 
     /**
      * Company Email Address
      */
-    company_email: "info@bethsaidamicroinsltd.com"
+    company_email: "support@fortfolio.info"
 }
 
 export default appConfig

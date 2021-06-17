@@ -255,6 +255,7 @@ class Investment extends React.Component {
     }
 
     fetch_investment_report = () =>{
+        this.setState({report:null});
         makeRequest(this.props).get('investment/report/fiat'+(this.state.selected_date != null ? "/"+this.state.selected_date : ""))
         .then(response => {
             this.setState({report: response.data.data.report})
@@ -410,6 +411,7 @@ class Investment extends React.Component {
                                     title="COMPLETED INVESTMENTS" 
                                     value={parseFloat(this.state.report.completed_investment_amount).toLocaleString()}
                                     extra={this.state.report.completed_investment_no}
+
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -421,6 +423,7 @@ class Investment extends React.Component {
                                     title="INTEREST DUE THIS MONTH" 
                                     value={parseFloat(this.state.report.interest_due_amount).toLocaleString()}
                                     extra={this.state.report.interest_due_no}
+
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -432,6 +435,7 @@ class Investment extends React.Component {
                                     title="INTEREST PAID THIS MONTH" 
                                     value={parseFloat(this.state.report.interest_paid_amount).toLocaleString()}
                                     extra={this.state.report.interest_paid_no}
+
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -443,6 +447,7 @@ class Investment extends React.Component {
                                     title="CAPITAL DUE THIS MONTH" 
                                     value={parseFloat(this.state.report.capital_due_amount).toLocaleString()}
                                     extra={this.state.report.capital_due_no}
+
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />
@@ -454,6 +459,7 @@ class Investment extends React.Component {
                                     title="CAPITAL PAID THIS MONTH" 
                                     value={parseFloat(this.state.report.capital_paid_amount).toLocaleString()}
                                     extra={this.state.report.capital_paid_no}
+
                                 />
                             ) : (
                                 <Skeleton animation="wave" height="100%" width="100%" />

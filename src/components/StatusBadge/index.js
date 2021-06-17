@@ -11,13 +11,13 @@ import {green, red, blue, grey, yellow, orange} from '@material-ui/core/colors';
             paddingTop: 1,
             paddingBottom: 3,
             backgroundColor: props => {
-                if((props.variant == 'active') || (props.variant == 'completed') || (props.variant == 'available') || (props.variant == 'paid') || (props.variant == 'paid')){
+                if((props.variant == 'active') || (props.variant == 'completed') || (props.variant == 'available') || (props.variant == 'paid') || (props.variant == 'paid') || (props.variant == 'income')){
                     return green[500]
                 }
-                else if((props.variant == 'pending') || (props.variant == 'unused') || (props.variant == 'defered')){
+                else if((props.variant == 'pending') || (props.variant == 'unused') || (props.variant == 'defered') ){
                     return orange[500]
                 }
-                else if((props.variant == 'inactive') || (props.variant == 'declined') || (props.variant == 'unpaid') || (props.variant == 'canceled')){
+                else if((props.variant == 'inactive') || (props.variant == 'declined') || (props.variant == 'unpaid') || (props.variant == 'canceled') || (props.variant == 'expense')){
                     return red[500]
                 }
                 else if((props.variant == 'default') || (props.variant == 'checked_out') || (props.variant == 'canceled')){
@@ -33,13 +33,13 @@ import {green, red, blue, grey, yellow, orange} from '@material-ui/core/colors';
             borderStyle: "solid",
             borderWidth: 1,
             borderColor: props => {
-                if((props.variant == 'active') || (props.variant == 'completed') || (props.variant == 'available') || (props.variant == 'paid')){
+                if((props.variant == 'active') || (props.variant == 'completed') || (props.variant == 'available') || (props.variant == 'paid')|| (props.variant == 'income')){
                     return green[500]
                 }
                 else if((props.variant == 'pending') || (props.variant == 'unused') || (props.variant == 'defered')){
                     return orange[500]
                 }
-                else if((props.variant == 'inactive') || (props.variant == 'declined') || (props.variant == 'unpaid') || (props.variant == 'canceled')){
+                else if((props.variant == 'inactive') || (props.variant == 'declined') || (props.variant == 'unpaid') || (props.variant == 'canceled') || (props.variant == 'expense')){
                     return red[500]
                 }
                 else if((props.variant == 'default') || (props.variant == 'checked_out') || (props.variant == 'canceled') || (props.variant == 'used')){

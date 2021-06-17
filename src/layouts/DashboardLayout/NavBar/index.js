@@ -21,7 +21,7 @@ import {
   Users,
   UserCheck,
   Clock,
-  Folder
+  Folder,
 } from 'react-feather';
 import NavItem from './NavItem';
 import {connect} from 'react-redux'
@@ -61,6 +61,11 @@ const items = [
     href: '/app/social-media',
     icon: Folder,
     title: 'Social Media'
+  },
+  {
+    href: '/app/income-expenses',
+    icon: AlertCircleIcon,
+    title: 'Income & Expenses'
   },
 ];
 

@@ -64,7 +64,7 @@ class CreateCustomer extends React.Component{
   }
 
   handleCreateCustomer = event =>{
-    if(this.state.staff_id && this.state.surname && this.state.first_name && this.state.other_name && this.state.email && this.state.gender && this.state.phone_number){
+    if(this.state.staff_id && this.state.surname && this.state.first_name && this.state.email && this.state.gender && this.state.phone_number){
         this.props.openDialog({
             viewCtrl: "warning",
             title: "Confirm New Customer",
@@ -72,6 +72,7 @@ class CreateCustomer extends React.Component{
             close: dialog =>{
                 if(dialog.viewCtrl == "success"){
                     this.clearFields()
+                    this.props.navigate("/app/customers");
                 }
                 dialog.close()
             },
@@ -316,4 +317,4 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(
     withSnackbar(
         withStyles(useStyles)(
-            withPermission(VIEW_PERMISSION_NAME)(withConfirmationDialog(CreateCustomer)))));
+            withPermission(VIEW_PERMISSION_NAME)(withConfirmationDialog(useRouter(CreateCustomer))))));

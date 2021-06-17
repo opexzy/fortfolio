@@ -89,7 +89,7 @@ class LoginView extends React.Component {
           <Container maxWidth="sm">
           <Box style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
                     <Avatar
-                      src="/logo-main.png"
+                      src="/fortfolio.png"
                       style={{height: 100, width: 100}}
                     />
                     <Typography>FortFolio Limited</Typography>

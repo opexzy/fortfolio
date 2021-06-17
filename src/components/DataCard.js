@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Budget = ({ className, title, value, extra, is_fiat, ...rest }) => {
+const Budget = ({ className, title, value, extra, is_fiat=true, ...rest }) => {
   const classes = useStyles();
 
   return (
