@@ -274,11 +274,20 @@ class Customer extends React.Component {
                                                     src={''} 
                                                     className={this.props.classes.avatar}
                                                 >
-                                                    {getInitials(row.first_name + " " + row.surname)} 
+                                                    {getInitials(row.account_type == "corporate" ? "C O" : row.first_name + " " + row.surname)} 
                                                 </Avatar>
                                                 <Box className={this.props.classes.boxInner}>
-                                                    <p className={this.props.classes.name}>{row.surname + " " + row.first_name + " " + row.other_name}</p>
-                                                    <p className={this.props.classes.position}>{row.gender}</p>
+                                                    {row.account_type == "corporate" ? (
+                                                        <>
+                                                            <p className={this.props.classes.name}>{row.corporate_name}</p>
+                                                            <p className={this.props.classes.position}>Corporate</p>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <p className={this.props.classes.name}>{row.surname + " " + row.first_name + " " + row.other_name}</p>
+                                                            <p className={this.props.classes.position}>{row.gender}</p>
+                                                        </>
+                                                    )}
                                                 </Box>
                                             </Box>
                                         </TableCell>

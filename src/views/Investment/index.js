@@ -472,11 +472,21 @@ class Investment extends React.Component {
                                                     src={''} 
                                                     className={this.props.classes.avatar}
                                                 >
-                                                    {getInitials(row.customer.first_name + " " + row.customer.surname)} 
+                                                    {getInitials(row.customer.account_type == "corporate" ? "C O" : row.customer.first_name + " " + row.customer.surname)} 
                                                 </Avatar>
                                                 <Box className={this.props.classes.boxInner}>
-                                                    <p className={this.props.classes.name}>{row.customer.surname + " " + row.customer.first_name + " " + row.customer.other_name}</p>
-                                                    <p className={this.props.classes.position}>Ref: #{row.id}</p>
+                                                    {row.customer.account_type == "corporate" ? (
+                                                        <>
+                                                            <p className={this.props.classes.name}>{row.customer.corporate_name}</p>
+                                                            <p className={this.props.classes.position}>Ref: #{row.id}</p>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <p className={this.props.classes.name}>{row.customer.surname + " " + row.customer.first_name + " " + row.customer.other_name}</p>
+                                                            <p className={this.props.classes.position}>Ref: #{row.id}</p>
+                                                        </>
+                                                    )}
+                                                    
                                                 </Box>
                                             </Box>
                                         </TableCell>

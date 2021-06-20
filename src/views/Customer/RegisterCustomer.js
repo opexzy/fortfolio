@@ -48,9 +48,11 @@ class CreateCustomer extends React.Component{
     super(props);
     this.state = {
         staff_id: null,
+        account_type: "individual",
         surname: null,
         first_name: null,
         other_name: null,
+        corporate_name: null,
         gender: null,
         email: null,
         phone_number: null,
@@ -64,7 +66,7 @@ class CreateCustomer extends React.Component{
   }
 
   handleCreateCustomer = event =>{
-    if(this.state.staff_id && this.state.surname && this.state.first_name && this.state.other_name && this.state.email && this.state.gender && this.state.phone_number){
+    if(this.state.staff_id && this.state.email && this.state.phone_number){
         this.props.openDialog({
             viewCtrl: "warning",
             title: "Confirm New Customer",
@@ -78,9 +80,11 @@ class CreateCustomer extends React.Component{
             confirm: dialog =>{
                 makeRequest(this.props).post('/customer/add',qs.stringify({
                     staff_id: this.state.staff_id,
+                    account_type: this.state.account_type,
                     surname: this.state.surname,
                     first_name: this.state.first_name,
                     other_name: this.state.other_name,
+                    corporate_name: this.state.corporate_name,
                     gender: this.state.gender,
                     email: this.state.email,
                     phone_number: this.state.phone_number,
@@ -191,46 +195,76 @@ class CreateCustomer extends React.Component{
                             <TextField
                                 fullWidth
                                 variant="outlined"
-                                label="Surname"
-                                name="surname"
-                                value={this.state.surname}
-                                onChange={e => this.setState({surname:e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="First Name"
-                                name="first_name"
-                                value={this.state.first_name}
-                                onChange={e => this.setState({first_name:e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Other Name"
-                                name="other_name"
-                                value={this.state.other_name}
-                                onChange={e => this.setState({other_name:e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Gender"
-                                name="gender"
-                                value={this.state.gender}
-                                onChange={e => this.setState({gender:e.target.value})}
+                                label="Account Type"
+                                name="account_type"
+                                value={this.state.account_type}
+                                onChange={e => this.setState({account_type:e.target.value})}
                                 select
                             >
-                                <MenuItem value="male">Male</MenuItem>
-                                <MenuItem value="female">Female</MenuItem>
+                                <MenuItem value="individual">Individual</MenuItem>
+                                <MenuItem value="corporate">Corporate</MenuItem>
                             </TextField>
                         </Grid>
+                        {this.state.account_type == "individual" ? (
+                            <>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="Surname"
+                                        name="surname"
+                                        value={this.state.surname}
+                                        onChange={e => this.setState({surname:e.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="First Name"
+                                        name="first_name"
+                                        value={this.state.first_name}
+                                        onChange={e => this.setState({first_name:e.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="Other Name"
+                                        name="other_name"
+                                        value={this.state.other_name}
+                                        onChange={e => this.setState({other_name:e.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="Gender"
+                                        name="gender"
+                                        value={this.state.gender}
+                                        onChange={e => this.setState({gender:e.target.value})}
+                                        select
+                                    >
+                                        <MenuItem value="male">Male</MenuItem>
+                                        <MenuItem value="female">Female</MenuItem>
+                                    </TextField>
+                                </Grid>
+                            </>
+                        ) : (
+                            <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    label="Corporate Name"
+                                    name="corporate_name"
+                                    value={this.state.corporate_name}
+                                    onChange={e => this.setState({corporate_name:e.target.value})}
+                                />
+                            </Grid>
+                        )}
+                        
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
                             <TextField
                                 fullWidth

@@ -151,10 +151,16 @@ class InvestmentDetail extends Component
                 <Box>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
-                            <Typography variant="h6" component="h6">Full Name</Typography>
-                            <Typography variant="caption" component="p">
-                                {`${this.props.data.customer.surname} ${this.props.data.customer.first_name} ${this.props.data.customer.other_name}`}
-                            </Typography>
+                            <Typography variant="h6" component="h6">Name</Typography>
+                            {this.props.data.customer.account_type == 'corporate' ? (
+                                <Typography variant="caption" component="p">
+                                   {this.props.data.customer.corporate}
+                                </Typography>
+                            ) : (
+                                <Typography variant="caption" component="p">
+                                    {`${this.props.data.customer.surname} ${this.props.data.customer.first_name} ${this.props.data.customer.other_name}`}
+                                </Typography>
+                            )}
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
                             <Typography variant="h6" component="h6">Account No.</Typography>

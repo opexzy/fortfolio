@@ -50,6 +50,8 @@ class CreateCustomer extends React.Component{
     super(props);
     this.state = {
         staff_id: null,
+        account_type: null,
+        corporate_name: null,
         surname: null,
         first_name: null,
         other_name: null,
@@ -81,6 +83,8 @@ class CreateCustomer extends React.Component{
             confirm: dialog =>{
                 makeRequest(this.props).post('/customer/update',qs.stringify({
                     id: this.props.params.id,
+                    account_type: this.state.account_type,
+                    corporate_name: this.state.corporate_name,
                     staff_id: this.state.staff_id,
                     surname: this.state.surname,
                     first_name: this.state.first_name,
@@ -163,6 +167,8 @@ class CreateCustomer extends React.Component{
     .then(response => {
        this.setState({
             staff_id: response.data.data.customer.staff.staff_id,
+            account_type: response.data.data.customer.account_type,
+            corporate_name: response.data.data.customer.corporate_name,
             surname: response.data.data.customer.surname,
             first_name: response.data.data.customer.first_name,
             other_name: response.data.data.customer.other_name,
@@ -230,49 +236,78 @@ class CreateCustomer extends React.Component{
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                                        <TextField
-                                            fullWidth
-                                            variant="outlined"
-                                            label="Surname"
-                                            name="surname"
-                                            value={this.state.surname}
-                                            onChange={e => this.setState({surname:e.target.value})}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                                        <TextField
-                                            fullWidth
-                                            variant="outlined"
-                                            label="First Name"
-                                            name="first_name"
-                                            value={this.state.first_name}
-                                            onChange={e => this.setState({first_name:e.target.value})}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                                        <TextField
-                                            fullWidth
-                                            variant="outlined"
-                                            label="Other Name"
-                                            name="other_name"
-                                            value={this.state.other_name}
-                                            onChange={e => this.setState({other_name:e.target.value})}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-                                        <TextField
-                                            fullWidth
-                                            variant="outlined"
-                                            label="Gender"
-                                            name="gender"
-                                            value={this.state.gender}
-                                            onChange={e => this.setState({gender:e.target.value})}
-                                            select
-                                        >
-                                            <MenuItem value="male">Male</MenuItem>
-                                            <MenuItem value="female">Female</MenuItem>
-                                        </TextField>
-                                    </Grid>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                label="Account Type"
+                                name="account_type"
+                                value={this.state.account_type}
+                                onChange={e => this.setState({account_type:e.target.value})}
+                                select
+                            >
+                                <MenuItem value="individual">Individual</MenuItem>
+                                <MenuItem value="corporate">Corporate</MenuItem>
+                            </TextField>
+                        </Grid>
+                        {this.state.account_type == "individual" ? (
+                            <>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="Surname"
+                                        name="surname"
+                                        value={this.state.surname}
+                                        onChange={e => this.setState({surname:e.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="First Name"
+                                        name="first_name"
+                                        value={this.state.first_name}
+                                        onChange={e => this.setState({first_name:e.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="Other Name"
+                                        name="other_name"
+                                        value={this.state.other_name}
+                                        onChange={e => this.setState({other_name:e.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        label="Gender"
+                                        name="gender"
+                                        value={this.state.gender}
+                                        onChange={e => this.setState({gender:e.target.value})}
+                                        select
+                                    >
+                                        <MenuItem value="male">Male</MenuItem>
+                                        <MenuItem value="female">Female</MenuItem>
+                                    </TextField>
+                                </Grid>
+                            </>
+                        ) : (
+                            <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    label="Corporate Name"
+                                    name="corporate_name"
+                                    value={this.state.corporate_name}
+                                    onChange={e => this.setState({corporate_name:e.target.value})}
+                                />
+                            </Grid>
+                        )}
                                     <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
                                         <TextField
                                             fullWidth

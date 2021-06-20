@@ -204,7 +204,14 @@ class AddInvestment extends React.Component{
                             >
                                 {
                                     this.state.customers.map((customer,index)=>(
-                                        <MenuItem value={customer.id}>{`${customer.surname} ${customer.first_name} ${customer.other_name}`}</MenuItem>
+                                        <>
+                                            {customer.account_type == "individual" ? (
+                                                <MenuItem value={customer.id}>{`${customer.surname} ${customer.first_name} ${customer.other_name}`}</MenuItem>
+                                            ) : (
+                                                <MenuItem value={customer.id}>{`${customer.corporate_name}`}</MenuItem>
+                                            )}
+                                        </>
+                                        
                                     ))
                                 }
                             </TextField>
