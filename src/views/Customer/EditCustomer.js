@@ -55,6 +55,9 @@ class CreateCustomer extends React.Component{
         other_name: null,
         gender: null,
         email: null,
+        bank_name: null,
+        account_name: null,
+        account_no: null,
         phone_number: null,
         address: null,
         date_of_birth: null,
@@ -67,7 +70,7 @@ class CreateCustomer extends React.Component{
   }
 
   handleUpdateCustomer = event =>{
-    if(this.state.staff_id && this.state.surname && this.state.first_name && this.state.other_name && this.state.email && this.state.gender && this.state.phone_number){
+    if(this.state.staff_id && this.state.surname && this.state.first_name  && this.state.email && this.state.gender && this.state.phone_number){
         this.props.openDialog({
             viewCtrl: "warning",
             title: "Confirm Customer Update",
@@ -87,6 +90,9 @@ class CreateCustomer extends React.Component{
                     other_name: this.state.other_name,
                     gender: this.state.gender,
                     email: this.state.email,
+                    bank_name: this.state.bank_name,
+                    account_name: this.state.account_name,
+                    account_no: this.state.account_no,
                     phone_number: this.state.phone_number,
                     address: this.state.address,
                     date_of_birth: this.state.date_of_birth,
@@ -168,6 +174,9 @@ class CreateCustomer extends React.Component{
             other_name: response.data.data.customer.other_name,
             gender: response.data.data.customer.gender,
             email: response.data.data.customer.email,
+            bank_name: response.data.data.customer.bank_name,
+            account_name: response.data.data.customer.account_name,
+            account_no: response.data.data.customer.account_no,
             phone_number: response.data.data.customer.phone_number,
             address: response.data.data.customer.address,
             date_of_birth: response.data.data.customer.date_of_birth,
@@ -281,6 +290,36 @@ class CreateCustomer extends React.Component{
                                             name="email"
                                             value={this.state.email}
                                             onChange={e => this.setState({email:e.target.value})}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            label="Bank Name"
+                                            name="bank_name"
+                                            value={this.state.bank_name}
+                                            onChange={e => this.setState({bank_name:e.target.value})}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            label="Account Name"
+                                            name="account_name"
+                                            value={this.state.account_name}
+                                            onChange={e => this.setState({account_name:e.target.value})}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            label="Account No"
+                                            name="account_no"
+                                            value={this.state.account_no}
+                                            onChange={e => this.setState({account_no:e.target.value})}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
