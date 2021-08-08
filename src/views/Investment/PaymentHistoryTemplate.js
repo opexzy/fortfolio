@@ -123,7 +123,7 @@ class ReceiptPrintTemplate extends Component
                 <Box display="flex" flexDirection="row" justifyContent="space-between">
                     <Box>
                         <Avatar
-                            src="/fortfolio.png"
+                            src="/credit-alert.png"
                             style={{height: 100, width: 100}}
                             variant="rounded"
                         />
