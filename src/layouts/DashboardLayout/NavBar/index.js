@@ -53,14 +53,9 @@ const items = [
     title: 'Payments'
   },
   {
-    href: '/app/fort-investments',
+    href: '/app/ca-investments',
     icon: Folder,
-    title: 'Forfolio Investment'
-  },
-  {
-    href: '/app/social-media',
-    icon: Folder,
-    title: 'Social Media'
+    title: 'Credit Alert Investment'
   },
   {
     href: '/app/income-expenses',

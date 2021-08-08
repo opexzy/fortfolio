@@ -73,12 +73,12 @@ class AddInvestment extends React.Component{
             description: "Make sure you have confirmed the details before you proceed from here",
             close: dialog =>{
                 if(dialog.viewCtrl == "success"){
-                    this.props.navigate("/app/fort-investments");
+                    this.props.navigate("/app/ca-investments");
                 }
                 dialog.close()
             },
             confirm: dialog =>{
-                makeRequest(this.props).post('/fort-investment/add', qs.stringify(this.state))
+                makeRequest(this.props).post('/ca-investment/add', qs.stringify(this.state))
                     .then(response => {
                         dialog.setViewCtrl("success")
                         dialog.setTitle("Investment Record Created!")
@@ -135,7 +135,7 @@ class AddInvestment extends React.Component{
            <Card>
                <CardHeader 
                     title="Create Investments" 
-                    subheader="Create and manage Fortfolio Investment"
+                    subheader="Create and manage Credit Alert Investment"
                 />
                 <Divider/>
                 <CardContent>

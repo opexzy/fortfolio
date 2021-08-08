@@ -10,12 +10,12 @@ const appConfig = {
     /**
      * Company Name
      */
-    company_name: "Fortfolio Limited",
+    company_name: "Credit Alert Limited",
 
     /**
      * Company Address Line 1
      */
-    company_address_line1: "Road 5, J269 Ikota shopping complex, Ajah lagos,",
+    company_address_line1: "Ikeja plaza, computer village, off-ayinke house, Ikeja,",
 
     /**
      * Company Address Line 2
@@ -30,7 +30,7 @@ const appConfig = {
     /**
      * Company Email Address
      */
-    company_email: "support@fortfolio.info"
+    company_email: "support@creditalert.co"
 }
 
 export default appConfig

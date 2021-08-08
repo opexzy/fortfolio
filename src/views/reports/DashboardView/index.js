@@ -128,15 +128,6 @@ class Dashboard extends React.Component{
               <TotalProfit data={this.state.data.fortfolio_investment} />
             </Grid>
 
-            <Grid
-              item
-              lg={4}
-              sm={6}
-              xl={4}
-              xs={12}
-            >
-              <Rooms data={this.state.data.media_campaign} />
-            </Grid>
           </Grid>
         </Container>
       </Page>

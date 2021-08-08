@@ -127,7 +127,7 @@ class Policy extends React.Component {
     
     onChangePage = (event, page) =>{
         this.setState({isLoading:true, page: page})
-        makeRequest(this.props).post('/fort-investment/list/' + (page+1), qs.stringify(this.state.filters))
+        makeRequest(this.props).post('/ca-investment/list/' + (page+1), qs.stringify(this.state.filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -158,7 +158,7 @@ class Policy extends React.Component {
 
     componentDidMount(){
         //check if token is valid
-        makeRequest(this.props).post('/fort-investment/list')
+        makeRequest(this.props).post('/ca-investment/list')
             .then(response => {
             this.setState({rows: response.data.data.list, count: response.data.data.count})
             })
@@ -180,7 +180,7 @@ class Policy extends React.Component {
 
     searchHandler = filters =>{
         this.setState({isLoading:true, page: 0})
-        makeRequest(this.props).post('/fort-investment/list', qs.stringify(filters))
+        makeRequest(this.props).post('/ca-investment/list', qs.stringify(filters))
         .then(response => {
            this.setState({
                rows:response.data.data.list,
@@ -234,7 +234,7 @@ class Policy extends React.Component {
                 dialog.close()
             },
             confirm: dialog =>{
-                makeRequest(this.props).get('/fort-investment/delete/'+id)
+                makeRequest(this.props).get('/ca-investment/delete/'+id)
                     .then(response => {
                         dialog.setViewCtrl("success")
                         dialog.setTitle("Removed!")
@@ -275,7 +275,7 @@ class Policy extends React.Component {
                 <Container maxWidth={false}>
                     <Toolbar is_fiat={true} />
                     <Box mt={3}>
-                    <DataLayoutWraper sectionHeading="Fortfolio Investment" searchHandler={this.searchHandler} reloadHandler={this.reload}>
+                    <DataLayoutWraper sectionHeading="Credit Alert Investment" searchHandler={this.searchHandler} reloadHandler={this.reload}>
                         <DataViewLoader isLoading={this.state.isLoading} data={this.state.rows}>
                             <TableMaker columns={this.state.columns} page={this.state.page} count={this.state.count} options={this.state.options}>
                                 {this.state.rows.map((row, index) => (
@@ -317,7 +317,7 @@ class Policy extends React.Component {
                                                 <IconMenuItem 
                                                     icon={<EditIcon color="primary"/>} 
                                                     text="View/Edit" 
-                                                    onClick={e=>this.props.navigate("/app/edit-fort-investment/"+row.id)}
+                                                    onClick={e=>this.props.navigate("/app/edit-ca-investment/"+row.id)}
                                                 />
                                                 <IconMenuItem 
                                                     icon={<Delete color="primary"/>} 

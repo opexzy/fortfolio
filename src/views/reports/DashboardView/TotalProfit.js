@@ -44,7 +44,7 @@ const TotalProfit = ({ className, data, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              FORTFOLIO INVESTMENT
+              CREDITALERT INVESTMENT
             </Typography>
             <Typography
               color="textPrimary"

@@ -41,7 +41,7 @@ const Toolbar = ({ className, is_fiat, ...rest }) => {
         <Button
           color="primary"
           variant="contained"
-          onClick={e=>{navigate('/app/add-fort-investment')}}
+          onClick={e=>{navigate('/app/add-ca-investment')}}
         >
           Add Investment
         </Button>

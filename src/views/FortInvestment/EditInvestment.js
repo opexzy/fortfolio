@@ -67,7 +67,7 @@ class AddInvestment extends React.Component{
     }
 
     componentDidMount(){
-        makeRequest(this.props).get('/fort-investment/get/'+this.props.params.id)
+        makeRequest(this.props).get('/ca-investment/get/'+this.props.params.id)
             .then(response => {
             this.setState({
                     id: response.data.data.investment.id,
@@ -100,12 +100,12 @@ class AddInvestment extends React.Component{
             description: "Make sure you have confirmed the details before you proceed from here",
             close: dialog =>{
                 if(dialog.viewCtrl == "success"){
-                    this.props.navigate("/app/fort-investments");
+                    this.props.navigate("/app/ca-investments");
                 }
                 dialog.close()
             },
             confirm: dialog =>{
-                makeRequest(this.props).post('/fort-investment/update/'+this.props.params.id, qs.stringify(this.state))
+                makeRequest(this.props).post('/ca-investment/update/'+this.props.params.id, qs.stringify(this.state))
                     .then(response => {
                         dialog.setViewCtrl("success")
                         dialog.setTitle("Investment Record Updated!")
@@ -162,7 +162,7 @@ class AddInvestment extends React.Component{
            <Card>
                <CardHeader 
                     title="Create Investments" 
-                    subheader="Create and manage Fortfolio Investment"
+                    subheader="Create and manage Credit Alert Investment"
                 />
                 <Divider/>
                 <CardContent>
