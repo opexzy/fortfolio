@@ -88,12 +88,9 @@ class LoginView extends React.Component {
         >
           <Container maxWidth="sm">
           <Box style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center"}}>
-                    <Avatar
-                      src="/credit-alert.png"
-                      style={{height: 100, width: 250}}
-                      variant="rounded"
-                    />
-                    <Typography variant="h4" component="h4" style={{marginTope:10}}>Credit Alert Limited</Typography>
+                  
+                  <img src="/credit-alert2.png" />
+                
                   </Box>
                   <TextField
                     fullWidth

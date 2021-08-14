@@ -15,7 +15,7 @@ const appConfig = {
     /**
      * Company Address Line 1
      */
-    company_address_line1: "Ikeja plaza, computer village, off-ayinke house, Ikeja,",
+    company_address_line1: "Ikeja plaza, computer village, off Lagos state High court, Ikeja,",
 
     /**
      * Company Address Line 2
@@ -25,12 +25,12 @@ const appConfig = {
     /**
      * Company Telephone No
      */
-    company_mobile: "+2348120912268",
+    company_mobile: "+234 802 733 6906",
 
     /**
      * Company Email Address
      */
-    company_email: "support@creditalert.co"
+    company_email: "support@creditalertinc.com"
 }
 
 export default appConfig

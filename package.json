@@ -4,7 +4,7 @@
   "licence": "MIT",
   "version": "1.0.0",
   "private": false,
-  "homepage": "https://fortfolio.co",
+  "homepage": "https://platform.creditalertinc.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

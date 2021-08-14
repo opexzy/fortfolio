@@ -1,10 +1,13 @@
 import React from 'react';
+import Avatar from '@material-ui/core/Avatar'
 
 const Logo = (props) => {
   return (
-    <img
+    <Avatar
       alt="Logo"
-      src="/static/logo.svg"
+      src="/credit-alert.png"
+      style={{width:50, height:50, background:"#fff"}}
+      variant="circle"
       {...props}
     />
   );
